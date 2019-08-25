@@ -17,7 +17,7 @@ class MixTapeContainer extends Component {
     result: "",
     search: "",
     books: [],
-    serverData: []
+    serverData: "",
   };
 
   // When this component mounts, console log what's currently in the MongoDatabase 
@@ -73,6 +73,11 @@ class MixTapeContainer extends Component {
         }
       );
 
+      spotifyApi.getPlaylistTracks('37i9dQZF1DWYtg7TV07mgz')
+      .then(data => this.setState({serverData: data.body}))
+
+      
+
     // spotifyApi.getPlaylistTracks('37i9dQZF1DWYtg7TV07mgz')
     // .then(
     //   function (data) {
@@ -108,30 +113,36 @@ class MixTapeContainer extends Component {
     let accessToken = parsed.access_token;
     let name = '';
     spotifyApi.setAccessToken(accessToken);
-    spotifyApi.getMe()
-      .then(data => {
-        name = data.body.display_name
-        this.setState({
-          serverData: {
-            user: {
-              name
-            }
-          }
-        })
-      })
-    spotifyApi.getPlaylistTracks('37i9dQZF1DWYtg7TV07mgz')
-      .then(data => this.setState({
-        serverData: {
-          playlists: {
-            title: data.body.items[0].track.name,
-            uri: data.body.items[0].track.uri,
-            artists: data.body.items[0].track.artists[0].name
-          },
-          user: {
-            name
-          }
-        }
-      }))
+
+    console.log(this.state.serverData);
+    // spotifyApi.getMe()
+    //   .then(data => {
+    //     name = data.body.display_name
+    //     this.setState({
+    //       serverData: {
+    //         user: {
+    //           name
+    //         }
+    //       }
+    //     })
+    //   })
+    // spotifyApi.getPlaylistTracks('37i9dQZF1DWYtg7TV07mgz')
+    //   .then(data => this.setState({
+    //     serverData: {
+    //       playlists: {
+    //         title: data.body.items[0].track.name,
+    //         uri: data.body.items[0].track.uri,
+    //         artists: data.body.items[0].track.artists[0].name
+    //       },
+    //       user: {
+    //         name
+    //       }
+    //     }
+    //   }))
+
+    // spotifyApi.getPlaylistTracks('37i9dQZF1DWYtg7TV07mgz')
+    //   .then(data => this.setState({serverData: data.body}))
+    //   console.log(this.state.serverData);
   };
 
 
@@ -169,6 +180,20 @@ class MixTapeContainer extends Component {
     // console.log(volumeInfo)
   };
 
+  handleBanSong = volumeInfo => {
+    // API.saveBook({
+    //   title: volumeInfo.title,
+    //   author: volumeInfo.authors[0],
+    //   publisher: volumeInfo.publisher,
+    //   publishedDate: volumeInfo.publishedDate,
+    //   isbnLong: (volumeInfo.industryIdentifiers[1] == null) ? 'undefined' : volumeInfo.industryIdentifiers[1].identifier,
+    //   googleBookListing: volumeInfo.canonicalVolumeLink
+    // })
+    //   .then(res => this.viewMongoDbData())
+    //   .catch(err => console.log(err));
+    console.log(volumeInfo)
+  };
+
   handleInputChange = event => {
     const value = event.target.value;
     const name = event.target.name;
@@ -188,24 +213,20 @@ class MixTapeContainer extends Component {
       <Container>
         <Row>
           <Col size="md-8">
-            <ul>
+            {/* <ul>
               <li>{this.state.serverData.user ? this.state.serverData.user.name : <p>Username will go here</p>}</li>
               <li>{this.state.serverData.playlists ? this.state.serverData.playlists.title : <p>Track Title Will go here</p>}</li>
               <li>{this.state.serverData.playlists ? this.state.serverData.playlists.uri : <p>URI Will go here</p>}</li>
               <li>{this.state.serverData.playlists ? this.state.serverData.playlists.artists : <p>Artist Will go here</p>}</li>
-            </ul>
-            {/* {this.state.serverData.user ? this.state.serverData.user.name : <p>Username will go here</p> }
-            {this.state.serverData.playlists ? this.state.serverData.playlists.title : <p>Track Title Will go here</p> }
-            {this.state.serverData.playlists ? this.state.serverData.playlists.uri : <p>URI Will go here</p> }
-            {this.state.serverData.playlists ? this.state.serverData.playlists.artists : <p>Artist Will go here</p> } */}
-            {/* <h2>{this.state.serverData.user}</h2> */}
+            </ul> */}
+
             <Card
               heading={"What you Want?"}
             >
-              {this.state.result ? (
-                <BookDetail
-                  results={this.state.result.items}
-                  onClickAction={this.handleAddSubmit}
+              {this.state.serverData ? (
+                <MixTapeDetail
+                  results={this.state.serverData}
+                  // onClickAction={this.handleBanSong}
                 />
               ) : (
                   <div>
@@ -239,6 +260,27 @@ class MixTapeContainer extends Component {
                 tabIndex="0">
                 Display Username
           </span>
+            </Card>
+
+            <Card
+              heading={"Old book search"}
+            >
+              {this.state.result ? (
+                <BookDetail
+                  results={this.state.result.items}
+                  onClickAction={this.handleAddSubmit}
+                />
+              ) : (
+                  <div>
+                    <h3>Your Spotify Playlists</h3>
+                    <ul>
+                      <li><strong>--- Nick's Dance Tunes --- (Target Playlist)</strong></li>
+                      <li>Nick pretends he can rap</li>
+                      <li>Classic Rock</li>
+                      <li>Everything Else</li>
+                    </ul>
+                  </div>
+                )}
             </Card>
           </Col>
           <Col size="md-4">

@@ -1,22 +1,40 @@
 import React from "react";
+import SpotifyPlayer from 'react-spotify-player';
 
-function BookDetail(props) {
+function MixTapeDetail(props) {
+  const size = {
+    width: '100%',
+    height: 80,
+  };
+  const view = 'list'; // or 'coverart'
+  const theme = 'white'; // or 'white'
   return (
     <div className="text-center">
-      {props.results.map(result => (
-        <div key ={result.id}>
-          <h3>Title: {result.volumeInfo.title}</h3>
-          <h3>Author: {result.volumeInfo.authors}</h3>
-          <h3>Publisher: {result.volumeInfo.publisher}</h3>
-          <h3>Published Date: {result.volumeInfo.publishedDate}</h3>
-          <h3>ISBN: {(result.volumeInfo.industryIdentifiers[1] == null) ? 'undefined' : result.volumeInfo.industryIdentifiers[1].identifier}</h3>
-          <h3><a href={result.volumeInfo.canonicalVolumeLink} target ="blank">More Info</a></h3>
+      {console.log(props.results.items)}
+      {props.results.items.map(result => (
+        <div key={result.track.uri}>
+          {/* <h3>Title: {result.track.name}</h3>
+          <h3>URI: {result.track.uri}</h3>
+          <h3>Spotify Urls: {result.track.external_urls.spotify}</h3> */}
+          <SpotifyPlayer
+            uri={result.track.external_urls.spotify}
+            size={size}
+            view={view}
+            theme={theme}
+          />
           <span 
             onClick={()=> {props.onClickAction(result.volumeInfo)}}
-            className="btn btn-secondary"
+            className="btn btn-danger"
             role="button"
             tabIndex="0">
-            SAVE ME
+            Banish
+          </span>
+          <span 
+            onClick={()=> {props.onClickAction(result.volumeInfo)}}
+            className="btn btn-primary"
+            role="button"
+            tabIndex="0">
+            Save
           </span>
           <hr />
         </div>
@@ -25,4 +43,4 @@ function BookDetail(props) {
   );
 }
 
-export default BookDetail;
+export default MixTapeDetail;
