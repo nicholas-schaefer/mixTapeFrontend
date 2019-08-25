@@ -5,6 +5,7 @@ import Col from "./Col";
 import Card from "./Card";
 import SearchForm from "./SearchForm";
 import BookDetail from "./BookDetail";
+import MixTapeDetail from "./MixTapeDetail";
 import API from "../utils/API";
 import { List, ListItem } from "./List";
 import DeleteBtn from "./DeleteBtn";
@@ -15,7 +16,8 @@ class MixTapeContainer extends Component {
   state = {
     result: "",
     search: "",
-    books: []
+    books: [],
+    serverData: []
   };
 
   // When this component mounts, console log what's currently in the MongoDatabase 
@@ -29,6 +31,22 @@ class MixTapeContainer extends Component {
     let parsed = queryString.parse(window.location.search);
     let accessToken = parsed.access_token;
     spotifyApi.setAccessToken(accessToken);
+
+    // spotifyApi.getMe()
+    // .then(data => this.setState({
+    //   serverData: {
+    //   user: {
+    //     name: data.body.display_name
+    //   }
+    //   }}), function (err) {
+    //   console.log('Something went wrong!', err);
+    // });
+
+    // spotifyApi.getMe()
+    // .then(data => this.setState(
+    //   {
+    //    serverData: data.body.display_name
+    //   }))
 
 
     spotifyApi.getMe()
@@ -55,6 +73,16 @@ class MixTapeContainer extends Component {
         }
       );
 
+    // spotifyApi.getPlaylistTracks('37i9dQZF1DWYtg7TV07mgz')
+    // .then(
+    //   function (data) {
+    //     console.log('The playlist contains these tracks', data.body);
+    //   },
+    //   function (err) {
+    //     console.log('Something went wrong!', err);
+    //   }
+    // );
+
   };
 
 
@@ -64,15 +92,46 @@ class MixTapeContainer extends Component {
     let parsed = queryString.parse(window.location.search);
     let accessToken = parsed.access_token;
     spotifyApi.setAccessToken(accessToken);
-    spotifyApi.addTracksToPlaylist('8n63fm6ayfj03y5qw8jrvtquk', 'X4Xphi5ngSLqvbgsWQmsTvk', '["spotify:track:4iV5W9uYEdYUVa79Axb7Rh", "spotify:track:1301WleyT98MSxVHPZCA6M"]')
-      .then(
-        function (data) {
-          console.log('The playlist contains these tracks', data.body);
-        },
-        function (err) {
-          console.log('Something went wrong!', err);
+    spotifyApi.addTracksToPlaylist('4Xphi5ngSLqvbgsWQmsTvk', ["spotify:track:4iV5W9uYEdYUVa79Axb7Rh", "spotify:track:1301WleyT98MSxVHPZCA6M"])
+      .then(function (data) {
+        console.log('Added tracks to playlist!');
+      }, function (err) {
+        console.log('Something went wrong!', err);
+      });
+
+  };
+
+  handleUserDisplay = () => {
+    var SpotifyWebApi = require('spotify-web-api-node');
+    var spotifyApi = new SpotifyWebApi();
+    let parsed = queryString.parse(window.location.search);
+    let accessToken = parsed.access_token;
+    let name = '';
+    spotifyApi.setAccessToken(accessToken);
+    spotifyApi.getMe()
+      .then(data => {
+        name = data.body.display_name
+        this.setState({
+          serverData: {
+            user: {
+              name
+            }
+          }
+        })
+      })
+    spotifyApi.getPlaylistTracks('37i9dQZF1DWYtg7TV07mgz')
+      .then(data => this.setState({
+        serverData: {
+          playlists: {
+            title: data.body.items[0].track.name,
+            uri: data.body.items[0].track.uri,
+            artists: data.body.items[0].track.artists[0].name
+          },
+          user: {
+            name
+          }
         }
-      );
+      }))
   };
 
 
@@ -129,8 +188,19 @@ class MixTapeContainer extends Component {
       <Container>
         <Row>
           <Col size="md-8">
+            <ul>
+              <li>{this.state.serverData.user ? this.state.serverData.user.name : <p>Username will go here</p>}</li>
+              <li>{this.state.serverData.playlists ? this.state.serverData.playlists.title : <p>Track Title Will go here</p>}</li>
+              <li>{this.state.serverData.playlists ? this.state.serverData.playlists.uri : <p>URI Will go here</p>}</li>
+              <li>{this.state.serverData.playlists ? this.state.serverData.playlists.artists : <p>Artist Will go here</p>}</li>
+            </ul>
+            {/* {this.state.serverData.user ? this.state.serverData.user.name : <p>Username will go here</p> }
+            {this.state.serverData.playlists ? this.state.serverData.playlists.title : <p>Track Title Will go here</p> }
+            {this.state.serverData.playlists ? this.state.serverData.playlists.uri : <p>URI Will go here</p> }
+            {this.state.serverData.playlists ? this.state.serverData.playlists.artists : <p>Artist Will go here</p> } */}
+            {/* <h2>{this.state.serverData.user}</h2> */}
             <Card
-              heading={"Mix Tape Home!"}
+              heading={"What you Want?"}
             >
               {this.state.result ? (
                 <BookDetail
@@ -138,7 +208,15 @@ class MixTapeContainer extends Component {
                   onClickAction={this.handleAddSubmit}
                 />
               ) : (
-                  <h3>No Results to Display</h3>
+                  <div>
+                    <h3>Your Spotify Playlists</h3>
+                    <ul>
+                      <li><strong>--- Nick's Dance Tunes --- (Target Playlist)</strong></li>
+                      <li>Nick pretends he can rap</li>
+                      <li>Classic Rock</li>
+                      <li>Everything Else</li>
+                    </ul>
+                  </div>
                 )}
               <span
                 onClick={() => window.location = 'http://localhost:8888/login'}
@@ -147,17 +225,24 @@ class MixTapeContainer extends Component {
                 tabIndex="0">
                 Login to Spotify
           </span>
-          <span
+              <span
                 onClick={() => this.handleSongAdd()}
                 className="btn btn-secondary"
                 role="button"
                 tabIndex="0">
                 Add this songs!
           </span>
+              <span
+                onClick={() => this.handleUserDisplay()}
+                className="btn btn-secondary"
+                role="button"
+                tabIndex="0">
+                Display Username
+          </span>
             </Card>
           </Col>
           <Col size="md-4">
-            <Card heading="Search">
+            <Card heading="Baby I got it!">
               <SearchForm
                 value={this.state.search}
                 handleInputChange={this.handleInputChange}
