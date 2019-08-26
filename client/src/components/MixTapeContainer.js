@@ -11,6 +11,7 @@ import { List, ListItem } from "./List";
 import DeleteBtn from "./DeleteBtn";
 
 import queryString from 'query-string';
+import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from "constants";
 
 class MixTapeContainer extends Component {
   state = {
@@ -63,7 +64,7 @@ class MixTapeContainer extends Component {
         console.log('Something went wrong!', err);
       });
 
-    spotifyApi.getPlaylistTracks('4Xphi5ngSLqvbgsWQmsTvk')
+    spotifyApi.getPlaylistTracks('3jzUdvQ9mzUZLP08odGSwS')
       .then(
         function (data) {
           console.log('The playlist contains these tracks', data.body);
@@ -73,10 +74,72 @@ class MixTapeContainer extends Component {
         }
       );
 
-      spotifyApi.getPlaylistTracks('37i9dQZF1DWYtg7TV07mgz')
-      .then(data => this.setState({serverData: data.body}))
+    // spotifyApi.getPlaylistTracks('3jzUdvQ9mzUZLP08odGSwS', { limit: 10, offset: 0 })
+    //   .then(data => this.setState({ serverData: data.body }))
 
-      
+    let offsetVal = 0;
+    let offsetIncrementer = 0;
+    const myPersonalPlaylistTracks = [];
+    var final = {
+      items: []
+    };
+    let getPlaylists = (offsetVal) => {
+      spotifyApi.getPlaylistTracks('3jzUdvQ9mzUZLP08odGSwS', { limit: 100, offset: offsetVal })
+        .then(data => {
+            if (data.body.next != null) {
+              console.log("On we Go!")
+              data.body.items.forEach(function (val, index) {
+                myPersonalPlaylistTracks.push(val);
+              });
+              offsetIncrementer += 100;
+              getPlaylists(offsetIncrementer)
+            } else {
+              console.log("End of the Road!")
+              data.body.items.forEach(function (val, index) {
+                myPersonalPlaylistTracks.push(val);
+                final.items = myPersonalPlaylistTracks;
+                // this.setState({ serverData: final })
+              });
+              console.log('The playlist contains these tracks', myPersonalPlaylistTracks)
+              console.log('The playlist contains these tracks', final)
+              this.setState({ serverData: final })
+              // testFunction(myPersonalPlaylistTracks);
+              // console.log(this.state.serverData);
+              // this.handleCompletePlaylist(final);
+
+              // console.log('The playlist contains these tracks', myPersonalPlaylistTracks);
+            }
+            // console.log('The playlist contains these tracks', data.body);
+            // console.log('The playlist contains these tracks', data.body.next);
+          },
+          function (err) {
+            console.log('Something went wrong!', err);
+          }
+        );
+    }
+    getPlaylists(offsetVal);
+    // function testFunction(value) {
+    //   console.log("hello world, I've been pressed" + value)
+    // }
+
+    // testFunction = () => {
+    //   console.log("hello world, I've been pressed")
+    // }
+
+
+    // spotifyApi.getPlaylistTracks('3jzUdvQ9mzUZLP08odGSwS', { limit: 100, offset: 300 })
+    // .then(
+    //   function (data) {
+    //     (data.body.next != null)? console.log("On we Go!") : console.log("End of the Road!")
+    //     console.log('The playlist contains these tracks', data.body);
+    //     console.log('The playlist contains these tracks', data.body.next);
+    //   },
+    //   function (err) {
+    //     console.log('Something went wrong!', err);
+    //   }
+    // );
+
+
 
     // spotifyApi.getPlaylistTracks('37i9dQZF1DWYtg7TV07mgz')
     // .then(
@@ -199,8 +262,8 @@ class MixTapeContainer extends Component {
       title: track.name,
       author: track.name,
       publisher: track.name,
-      publishedDate: track.uri,
-      isbnLong: track.name,
+      publishedDate: track.name,
+      isbnLong: track.uri,
       googleBookListing: track.name
     })
       .then(res => this.viewMongoDbData())
@@ -242,6 +305,7 @@ class MixTapeContainer extends Component {
                   results={this.state.serverData}
                   onClickActionBan={this.handleBanSong}
                   onClickActionSave={this.handleSaveSong}
+                  isbnInDatabase={this.state.books}
                 />
               ) : (
                   <div>
