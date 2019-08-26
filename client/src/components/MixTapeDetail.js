@@ -23,14 +23,14 @@ function MixTapeDetail(props) {
             theme={theme}
           />
           <span 
-            onClick={()=> {props.onClickAction(result.volumeInfo)}}
+            onClick={()=> {props.onClickActionBan(result.track)}}
             className="btn btn-danger"
             role="button"
             tabIndex="0">
             Banish
           </span>
           <span 
-            onClick={()=> {props.onClickAction(result.volumeInfo)}}
+            onClick={()=> {props.onClickActionSave(result.track)}}
             className="btn btn-primary"
             role="button"
             tabIndex="0">

@@ -180,7 +180,7 @@ class MixTapeContainer extends Component {
     // console.log(volumeInfo)
   };
 
-  handleBanSong = volumeInfo => {
+  handleBanSong = track => {
     // API.saveBook({
     //   title: volumeInfo.title,
     //   author: volumeInfo.authors[0],
@@ -191,7 +191,21 @@ class MixTapeContainer extends Component {
     // })
     //   .then(res => this.viewMongoDbData())
     //   .catch(err => console.log(err));
-    console.log(volumeInfo)
+    console.log(track)
+  };
+
+  handleSaveSong = track => {
+    // API.saveBook({
+    //   title: volumeInfo.title,
+    //   author: volumeInfo.authors[0],
+    //   publisher: volumeInfo.publisher,
+    //   publishedDate: volumeInfo.publishedDate,
+    //   isbnLong: (volumeInfo.industryIdentifiers[1] == null) ? 'undefined' : volumeInfo.industryIdentifiers[1].identifier,
+    //   googleBookListing: volumeInfo.canonicalVolumeLink
+    // })
+    //   .then(res => this.viewMongoDbData())
+    //   .catch(err => console.log(err));
+    console.log(track)
   };
 
   handleInputChange = event => {
@@ -226,7 +240,8 @@ class MixTapeContainer extends Component {
               {this.state.serverData ? (
                 <MixTapeDetail
                   results={this.state.serverData}
-                  // onClickAction={this.handleBanSong}
+                  onClickActionBan={this.handleBanSong}
+                  onClickActionSave={this.handleSaveSong}
                 />
               ) : (
                   <div>
