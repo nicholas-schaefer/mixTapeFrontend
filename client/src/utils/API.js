@@ -20,5 +20,9 @@ export default {
   // Saves a book to the database
   saveBook: function(bookData) {
   return axios.post("/api/books", bookData);
+  },
+  // Saves a song to the database
+  banSong: function(bookData) {
+  return axios.post("/api/books", bookData);
 }
 };

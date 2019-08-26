@@ -180,31 +180,31 @@ class MixTapeContainer extends Component {
     // console.log(volumeInfo)
   };
 
-  handleBanSong = track => {
-    // API.saveBook({
-    //   title: volumeInfo.title,
-    //   author: volumeInfo.authors[0],
-    //   publisher: volumeInfo.publisher,
-    //   publishedDate: volumeInfo.publishedDate,
-    //   isbnLong: (volumeInfo.industryIdentifiers[1] == null) ? 'undefined' : volumeInfo.industryIdentifiers[1].identifier,
-    //   googleBookListing: volumeInfo.canonicalVolumeLink
+  handleSaveSong = track => {
+    // API.saveSong({
+    //   title: track.name,
+    //   author: track.name,
+    //   publisher: track.name,
+    //   publishedDate: track.uri,
+    //   isbnLong: track.name,
+    //   googleBookListing: track.name
     // })
     //   .then(res => this.viewMongoDbData())
     //   .catch(err => console.log(err));
     console.log(track)
   };
 
-  handleSaveSong = track => {
-    // API.saveBook({
-    //   title: volumeInfo.title,
-    //   author: volumeInfo.authors[0],
-    //   publisher: volumeInfo.publisher,
-    //   publishedDate: volumeInfo.publishedDate,
-    //   isbnLong: (volumeInfo.industryIdentifiers[1] == null) ? 'undefined' : volumeInfo.industryIdentifiers[1].identifier,
-    //   googleBookListing: volumeInfo.canonicalVolumeLink
-    // })
-    //   .then(res => this.viewMongoDbData())
-    //   .catch(err => console.log(err));
+  handleBanSong = track => {
+    API.banSong({
+      title: track.name,
+      author: track.name,
+      publisher: track.name,
+      publishedDate: track.uri,
+      isbnLong: track.name,
+      googleBookListing: track.name
+    })
+      .then(res => this.viewMongoDbData())
+      .catch(err => console.log(err));
     console.log(track)
   };
 
