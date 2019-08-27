@@ -74,22 +74,24 @@ class MixTapeContainer extends Component {
         }
       );
 
-    let offsetVal = 0;
-    let offsetIncrementer = 0;
-    const myPersonalPlaylistTracks = [];
-    var final = {
-      items: []
-    };
-    let getPlaylists = (offsetVal) => {
-      spotifyApi.getPlaylistTracks('37i9dQZF1DWZQaaqNMbbXa', { limit: 100, offset: offsetVal })
-        .then(data => {
+    let getAllTracksSetState = (trackUri, stateKey) => {
+      let state = stateKey;
+      let offsetVal = 0;
+      let offsetIncrementer = 0;
+      const myPersonalPlaylistTracks = [];
+      var final = {
+        items: []
+      };
+      let getPlaylists = (offsetVal, trackUri) => {
+        spotifyApi.getPlaylistTracks(trackUri, { limit: 100, offset: offsetVal })
+          .then(data => {
             if (data.body.next != null) {
               console.log("On we Go!")
               data.body.items.forEach(function (val, index) {
                 myPersonalPlaylistTracks.push(val);
               });
               offsetIncrementer += 100;
-              getPlaylists(offsetIncrementer)
+              getPlaylists(offsetIncrementer, trackUri)
             } else {
               console.log("End of the Road!")
               data.body.items.forEach(function (val, index) {
@@ -98,16 +100,17 @@ class MixTapeContainer extends Component {
               });
               console.log('The playlist contains these tracks', myPersonalPlaylistTracks)
               console.log('The playlist contains these tracks', final)
-              this.setState({ serverData: final })
-              // console.log(this.state.serverData);
+              this.setState({ [`${state}`]: final })
             }
           },
-          function (err) {
-            console.log('Something went wrong!', err);
-          }
-        );
+            function (err) {
+              console.log('Something went wrong!', err);
+            }
+          );
+      }
+      getPlaylists(offsetVal, trackUri, stateKey);
     }
-    getPlaylists(offsetVal);
+    getAllTracksSetState('37i9dQZF1DWZQaaqNMbbXa', 'serverData');
 
   };
 

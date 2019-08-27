@@ -23,7 +23,7 @@ function MixTapeDetail(props) {
   const theme = 'black'; // or 'white'
   return (
     <div className="text-center">
-      {console.log(props.results.items)}
+      {/* {console.log(props.results.items)} */}
       {props.results.items.map(result => (
         <div key={result.track.uri} style={(props.isbnInDatabase.some(e => e.isbnLong === result.track.uri)) ? hideStyle : showStyle}>
           {/* <p>Test ={(props.isbnInDatabase.some(e => e.isbnLong === result.track.uri)) ? 'hide' : 'show'}</p>
