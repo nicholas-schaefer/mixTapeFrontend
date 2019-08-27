@@ -17,8 +17,12 @@ class MixTapeContainer extends Component {
   state = {
     result: "",
     search: "",
+    selectedSendingPlaylistSearch: "",
+    selectedSendingPlaylistData: "",
+    selectedSendingPlaylistDetails: "",
     books: [],
     serverData: "",
+    receivingPlaylist: ""
   };
 
   // When this component mounts, console log what's currently in the MongoDatabase 
@@ -64,7 +68,17 @@ class MixTapeContainer extends Component {
         console.log('Something went wrong!', err);
       });
 
-    spotifyApi.getPlaylistTracks('3jzUdvQ9mzUZLP08odGSwS')
+    spotifyApi.getPlaylist('3jzUdvQ9mzUZLP08odGSwS')
+      .then(
+        function (data) {
+          console.log('PLAYLIST DATA', data.body);
+        },
+        function (err) {
+          console.log('Something went wrong!', err);
+        }
+      );
+
+    spotifyApi.getPlaylistTracks('37i9dQZF1DWZQaaqNMbbXa')
       .then(
         function (data) {
           console.log('The playlist contains these tracks', data.body);
@@ -74,45 +88,111 @@ class MixTapeContainer extends Component {
         }
       );
 
-    let getAllTracksSetState = (trackUri, stateKey) => {
-      let state = stateKey;
-      let offsetVal = 0;
-      let offsetIncrementer = 0;
-      const myPersonalPlaylistTracks = [];
-      var final = {
-        items: []
-      };
-      let getPlaylists = (offsetVal, trackUri) => {
-        spotifyApi.getPlaylistTracks(trackUri, { limit: 100, offset: offsetVal })
-          .then(data => {
-            if (data.body.next != null) {
-              console.log("On we Go!")
-              data.body.items.forEach(function (val, index) {
-                myPersonalPlaylistTracks.push(val);
-              });
-              offsetIncrementer += 100;
-              getPlaylists(offsetIncrementer, trackUri)
-            } else {
-              console.log("End of the Road!")
-              data.body.items.forEach(function (val, index) {
-                myPersonalPlaylistTracks.push(val);
-                final.items = myPersonalPlaylistTracks;
-              });
-              console.log('The playlist contains these tracks', myPersonalPlaylistTracks)
-              console.log('The playlist contains these tracks', final)
-              this.setState({ [`${state}`]: final })
-            }
-          },
-            function (err) {
-              console.log('Something went wrong!', err);
-            }
-          );
-      }
-      getPlaylists(offsetVal, trackUri, stateKey);
-    }
-    getAllTracksSetState('37i9dQZF1DWZQaaqNMbbXa', 'serverData');
+    // let getAllTracksSetState = (trackUri, stateKey) => {
+    //   let state = stateKey;
+    //   let offsetVal = 0;
+    //   let offsetIncrementer = 0;
+    //   const myPersonalPlaylistTracks = [];
+    //   var final = {
+    //     items: []
+    //   };
+    //   let getPlaylists = (offsetVal, trackUri) => {
+    //     spotifyApi.getPlaylistTracks(trackUri, { limit: 100, offset: offsetVal })
+    //       .then(data => {
+    //         if (data.body.next != null) {
+    //           console.log("On we Go!")
+    //           data.body.items.forEach(function (val, index) {
+    //             myPersonalPlaylistTracks.push(val);
+    //           });
+    //           offsetIncrementer += 100;
+    //           getPlaylists(offsetIncrementer, trackUri)
+    //         } else {
+    //           console.log("End of the Road!")
+    //           data.body.items.forEach(function (val, index) {
+    //             myPersonalPlaylistTracks.push(val);
+    //             final.items = myPersonalPlaylistTracks;
+    //           });
+    //           console.log('The playlist contains these tracks', myPersonalPlaylistTracks)
+    //           console.log('The playlist contains these tracks', final)
+    //           this.setState({ [`${state}`]: final })
+    //         }
+    //       },
+    //         function (err) {
+    //           console.log('Something went wrong!', err);
+    //         }
+    //       );
+    //   }
+    //   getPlaylists(offsetVal, trackUri, stateKey);
+    // }
+    // getAllTracksSetState('37i9dQZF1DWZQaaqNMbbXa', 'serverData');
 
   };
+
+    getPlaylistDetailsSetState = (trackUri, stateKey) => {
+      var SpotifyWebApi = require('spotify-web-api-node');
+      var spotifyApi = new SpotifyWebApi();
+      let parsed = queryString.parse(window.location.search);
+      let accessToken = parsed.access_token;
+      spotifyApi.setAccessToken(accessToken);
+      let state = stateKey;
+      spotifyApi.getPlaylist(trackUri)
+      .then(data => {
+          console.log(state);
+          console.log('The playlist contains these tracks', data.body);
+          this.setState({ [`${state}`]: data.body })
+          console.log(this.state.receivingPlaylist.name);
+        },
+        function (err) {
+          console.log('Something went wrong!', err);
+        }
+      );
+
+    }
+
+
+    getAllTracksSetState = (trackUri, stateKey) => {
+    let state = stateKey;
+    let offsetVal = 0;
+    let offsetIncrementer = 0;
+    const myPersonalPlaylistTracks = [];
+    var final = {
+      items: []
+    };
+    let getPlaylists = (offsetVal, trackUri) => {
+      var SpotifyWebApi = require('spotify-web-api-node');
+      var spotifyApi = new SpotifyWebApi();
+      let parsed = queryString.parse(window.location.search);
+      let accessToken = parsed.access_token;
+      spotifyApi.setAccessToken(accessToken);
+      spotifyApi.getPlaylistTracks(trackUri, { limit: 100, offset: offsetVal })
+        .then(data => {
+          if (data.body.next != null) {
+            console.log("On we Go!")
+            data.body.items.forEach(function (val, index) {
+              myPersonalPlaylistTracks.push(val);
+            });
+            offsetIncrementer += 100;
+            getPlaylists(offsetIncrementer, trackUri)
+          } else {
+            console.log("End of the Road!")
+            data.body.items.forEach(function (val, index) {
+              myPersonalPlaylistTracks.push(val);
+              final.items = myPersonalPlaylistTracks;
+            });
+            console.log('The playlist contains these tracks', myPersonalPlaylistTracks)
+            console.log('The playlist contains these tracks', final)
+            this.setState({ [`${state}`]: final })
+            console.log(this.state.selectedSendingPlaylistData);
+            console.log(this.state.selectedSendingPlaylistDetails);
+          }
+        },
+          function (err) {
+            console.log('Something went wrong!', err);
+          }
+        );
+    }
+    getPlaylists(offsetVal, trackUri, stateKey);
+  }
 
 
   handleSongAdd = () => {
@@ -244,7 +324,17 @@ class MixTapeContainer extends Component {
   // When the form is submitted, search the Google Books API for the value of `this.state.search`
   handleFormSubmit = event => {
     event.preventDefault();
-    this.searchBooks(this.state.search);
+    console.log(this.state.search);
+    this.getAllTracksSetState(this.state.search, 'serverData');
+    this.getPlaylistDetailsSetState(this.state.search, 'receivingPlaylist');
+    // this.searchBooks(this.state.search);
+  };
+
+  handleSendingPlaylistSubmit = event => {
+    event.preventDefault();
+    console.log(this.state.selectedSendingPlaylistSearch);
+    this.getAllTracksSetState(this.state.selectedSendingPlaylistSearch, 'selectedSendingPlaylistData');
+    this.getPlaylistDetailsSetState(this.state.selectedSendingPlaylistSearch, 'selectedSendingPlaylistDetails');
   };
 
   render() {
@@ -253,7 +343,7 @@ class MixTapeContainer extends Component {
         <Row>
           <Col size="md-8">
             <Card
-              heading={"What you Want?"}
+              heading={this.state.receivingPlaylist.name} 
             >
               {this.state.serverData ? (
                 <MixTapeDetail
@@ -318,14 +408,27 @@ class MixTapeContainer extends Component {
             </Card>
           </Col>
           <Col size="md-4">
-            <Card heading="Baby I got it!">
+            <Card heading="Choose Playlists">
               <SearchForm
+                description= {this.state.receivingPlaylist.name} 
+                placeholder= "Sending Playlist URI"
+                buttonText= "Submit"
                 value={this.state.search}
                 handleInputChange={this.handleInputChange}
+                name="search"
                 handleFormSubmit={this.handleFormSubmit}
               />
+              <SearchForm
+                description= {this.state.selectedSendingPlaylistDetails.name}
+                placeholder= "Receiving Playlist URI"
+                buttonText= "Submit"
+                value={this.state.selectedSendingPlaylistSearch}
+                handleInputChange={this.handleInputChange}
+                name="selectedSendingPlaylistSearch"
+                handleFormSubmit={this.handleSendingPlaylistSubmit}
+              />
             </Card>
-            <Card heading="Results">
+            <Card heading="Banished">
               <List>
                 {this.state.books.map(book => (
                   <ListItem key={book._id}>

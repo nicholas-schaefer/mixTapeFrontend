@@ -4,19 +4,18 @@ function SearchForm(props) {
   return (
     <form>
       <div className="form-group">
-        <label htmlFor="search">Search:</label>
+        <label htmlFor="search">{props.description}</label>
         <input
           onChange={props.handleInputChange}
           value={props.value}
-          name="search"
+          name={props.name}
           type="text"
           className="form-control"
-          placeholder="Search For an Author"
-          id="search"
+          placeholder={props.placeholder}
         />
         <br />
         <button onClick={props.handleFormSubmit} className="btn btn-primary">
-          Search
+          {props.buttonText}
         </button>
       </div>
     </form>
