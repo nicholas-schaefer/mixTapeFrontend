@@ -20,6 +20,7 @@ class MixTapeContainer extends Component {
     selectedSendingPlaylistSearch: "",
     selectedSendingPlaylistData: "",
     selectedSendingPlaylistDetails: "",
+    userData: "",
     books: [],
     serverData: "",
     receivingPlaylist: ""
@@ -55,11 +56,12 @@ class MixTapeContainer extends Component {
 
 
     spotifyApi.getMe()
-      .then(function (data) {
-        console.log('Some information about the authenticated user', data.body);
-      }, function (err) {
+    .then(data => this.setState(
+      {
+       userData: data.body
+      }), function (err) {
         console.log('Something went wrong!', err);
-      });
+      });      
 
     spotifyApi.getUserPlaylists('8n63fm6ayfj03y5qw8jrvtquk')
       .then(function (data) {
@@ -291,7 +293,7 @@ class MixTapeContainer extends Component {
     let parsed = queryString.parse(window.location.search);
     let accessToken = parsed.access_token;
     spotifyApi.setAccessToken(accessToken);
-    spotifyApi.addTracksToPlaylist(`4Xphi5ngSLqvbgsWQmsTvk`, [`spotify:track:${track.id}`])
+    spotifyApi.addTracksToPlaylist(this.state.selectedSendingPlaylistDetails.id, [`spotify:track:${track.id}`])
       .then(function (data) {
         console.log('Added tracks to playlist!');
       }, function (err) {
@@ -354,13 +356,8 @@ class MixTapeContainer extends Component {
                 />
               ) : (
                   <div>
-                    <h3>Your Spotify Playlists</h3>
-                    <ul>
-                      <li><strong>--- Nick's Dance Tunes --- (Target Playlist)</strong></li>
-                      <li>Nick pretends he can rap</li>
-                      <li>Classic Rock</li>
-                      <li>Everything Else</li>
-                    </ul>
+                    <h3>Welcome to MixTape {this.state.userData.display_name}</h3>
+                    <p>Click Login Button to Begin!</p>
                   </div>
                 )}
               <span
@@ -370,41 +367,6 @@ class MixTapeContainer extends Component {
                 tabIndex="0">
                 Login to Spotify
           </span>
-              <span
-                onClick={() => this.handleSongAdd()}
-                className="btn btn-secondary"
-                role="button"
-                tabIndex="0">
-                Add this songs!
-          </span>
-              <span
-                onClick={() => this.handleUserDisplay()}
-                className="btn btn-secondary"
-                role="button"
-                tabIndex="0">
-                Display Username
-          </span>
-            </Card>
-
-            <Card
-              heading={"Old book search"}
-            >
-              {this.state.result ? (
-                <BookDetail
-                  results={this.state.result.items}
-                  onClickAction={this.handleAddSubmit}
-                />
-              ) : (
-                  <div>
-                    <h3>Your Spotify Playlists</h3>
-                    <ul>
-                      <li><strong>--- Nick's Dance Tunes --- (Target Playlist)</strong></li>
-                      <li>Nick pretends he can rap</li>
-                      <li>Classic Rock</li>
-                      <li>Everything Else</li>
-                    </ul>
-                  </div>
-                )}
             </Card>
           </Col>
           <Col size="md-4">
