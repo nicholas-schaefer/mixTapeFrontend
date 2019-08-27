@@ -84,7 +84,7 @@ class MixTapeContainer extends Component {
       items: []
     };
     let getPlaylists = (offsetVal) => {
-      spotifyApi.getPlaylistTracks('3jzUdvQ9mzUZLP08odGSwS', { limit: 100, offset: offsetVal })
+      spotifyApi.getPlaylistTracks('37i9dQZF1DWZQaaqNMbbXa', { limit: 100, offset: offsetVal })
         .then(data => {
             if (data.body.next != null) {
               console.log("On we Go!")

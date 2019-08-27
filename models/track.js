@@ -11,6 +11,11 @@ const bookSchema = new Schema({
   // date: { type: Date, default: Date.now }
 });
 
-const Book = mongoose.model("Book", bookSchema);
+const Track = mongoose.model("Track", bookSchema);
 
-module.exports = Book;
+module.exports = Track;
+
+
+// const Book = mongoose.model("Book", bookSchema);
+
+// module.exports = Book;

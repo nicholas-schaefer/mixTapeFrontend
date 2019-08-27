@@ -26,8 +26,8 @@ function MixTapeDetail(props) {
       {console.log(props.results.items)}
       {props.results.items.map(result => (
         <div key={result.track.uri} style={(props.isbnInDatabase.some(e => e.isbnLong === result.track.uri)) ? hideStyle : showStyle}>
-          <p>Test ={(props.isbnInDatabase.some(e => e.isbnLong === result.track.uri)) ? 'hide' : 'show'}</p>
-          {/* <h3>Title: {result.track.name}</h3>
+          {/* <p>Test ={(props.isbnInDatabase.some(e => e.isbnLong === result.track.uri)) ? 'hide' : 'show'}</p>
+          <h3>Title: {result.track.name}</h3>
           <h3>URI: {result.track.uri}</h3>
           <h3>Spotify Urls: {result.track.external_urls.spotify}</h3> */}
           <SpotifyPlayer

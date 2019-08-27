@@ -11,18 +11,18 @@ export default {
   },
   // Gets all books
   getBooks: function() {
-  return axios.get("/api/books");
+  return axios.get("/api/tracks");
   },
   // Deletes the book with the given id
   deleteBook: function(id) {
-    return axios.delete("/api/books/" + id);
+    return axios.delete("/api/tracks/" + id);
   },
   // Saves a book to the database
-  saveBook: function(bookData) {
-  return axios.post("/api/books", bookData);
+  saveBook: function(trackData) {
+  return axios.post("/api/tracks", trackData);
   },
   // Saves a song to the database
-  banSong: function(bookData) {
-  return axios.post("/api/books", bookData);
+  banSong: function(trackData) {
+  return axios.post("/api/tracks", trackData);
 }
 };
