@@ -13,7 +13,7 @@ export default {
   getBooks: function() {
   return axios.get("/api/tracks");
   },
-  // Deletes the book with the given id
+  // Deletes the track with the given id
   deleteBook: function(id) {
     return axios.delete("/api/tracks/" + id);
   },
@@ -21,7 +21,7 @@ export default {
   saveBook: function(trackData) {
   return axios.post("/api/tracks", trackData);
   },
-  // Saves a song to the database
+  // Saves track to the database
   banSong: function(trackData) {
   return axios.post("/api/tracks", trackData);
 }

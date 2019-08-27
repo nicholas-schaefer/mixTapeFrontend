@@ -74,9 +74,6 @@ class MixTapeContainer extends Component {
         }
       );
 
-    // spotifyApi.getPlaylistTracks('3jzUdvQ9mzUZLP08odGSwS', { limit: 10, offset: 0 })
-    //   .then(data => this.setState({ serverData: data.body }))
-
     let offsetVal = 0;
     let offsetIncrementer = 0;
     const myPersonalPlaylistTracks = [];
@@ -98,19 +95,12 @@ class MixTapeContainer extends Component {
               data.body.items.forEach(function (val, index) {
                 myPersonalPlaylistTracks.push(val);
                 final.items = myPersonalPlaylistTracks;
-                // this.setState({ serverData: final })
               });
               console.log('The playlist contains these tracks', myPersonalPlaylistTracks)
               console.log('The playlist contains these tracks', final)
               this.setState({ serverData: final })
-              // testFunction(myPersonalPlaylistTracks);
               // console.log(this.state.serverData);
-              // this.handleCompletePlaylist(final);
-
-              // console.log('The playlist contains these tracks', myPersonalPlaylistTracks);
             }
-            // console.log('The playlist contains these tracks', data.body);
-            // console.log('The playlist contains these tracks', data.body.next);
           },
           function (err) {
             console.log('Something went wrong!', err);
@@ -118,38 +108,6 @@ class MixTapeContainer extends Component {
         );
     }
     getPlaylists(offsetVal);
-    // function testFunction(value) {
-    //   console.log("hello world, I've been pressed" + value)
-    // }
-
-    // testFunction = () => {
-    //   console.log("hello world, I've been pressed")
-    // }
-
-
-    // spotifyApi.getPlaylistTracks('3jzUdvQ9mzUZLP08odGSwS', { limit: 100, offset: 300 })
-    // .then(
-    //   function (data) {
-    //     (data.body.next != null)? console.log("On we Go!") : console.log("End of the Road!")
-    //     console.log('The playlist contains these tracks', data.body);
-    //     console.log('The playlist contains these tracks', data.body.next);
-    //   },
-    //   function (err) {
-    //     console.log('Something went wrong!', err);
-    //   }
-    // );
-
-
-
-    // spotifyApi.getPlaylistTracks('37i9dQZF1DWYtg7TV07mgz')
-    // .then(
-    //   function (data) {
-    //     console.log('The playlist contains these tracks', data.body);
-    //   },
-    //   function (err) {
-    //     console.log('Something went wrong!', err);
-    //   }
-    // );
 
   };
 
@@ -244,17 +202,18 @@ class MixTapeContainer extends Component {
   };
 
   handleSaveSong = track => {
-    // API.saveSong({
-    //   title: track.name,
-    //   author: track.name,
-    //   publisher: track.name,
-    //   publishedDate: track.uri,
-    //   isbnLong: track.name,
-    //   googleBookListing: track.name
-    // })
-    //   .then(res => this.viewMongoDbData())
-    //   .catch(err => console.log(err));
-    console.log(track)
+    console.log(track.id)
+    var SpotifyWebApi = require('spotify-web-api-node');
+    var spotifyApi = new SpotifyWebApi();
+    let parsed = queryString.parse(window.location.search);
+    let accessToken = parsed.access_token;
+    spotifyApi.setAccessToken(accessToken);
+    spotifyApi.addTracksToPlaylist(`4Xphi5ngSLqvbgsWQmsTvk`, [`spotify:track:${track.id}`])
+      .then(function (data) {
+        console.log('Added tracks to playlist!');
+      }, function (err) {
+        console.log('Something went wrong!', err);
+      });
   };
 
   handleBanSong = track => {
@@ -290,13 +249,6 @@ class MixTapeContainer extends Component {
       <Container>
         <Row>
           <Col size="md-8">
-            {/* <ul>
-              <li>{this.state.serverData.user ? this.state.serverData.user.name : <p>Username will go here</p>}</li>
-              <li>{this.state.serverData.playlists ? this.state.serverData.playlists.title : <p>Track Title Will go here</p>}</li>
-              <li>{this.state.serverData.playlists ? this.state.serverData.playlists.uri : <p>URI Will go here</p>}</li>
-              <li>{this.state.serverData.playlists ? this.state.serverData.playlists.artists : <p>Artist Will go here</p>}</li>
-            </ul> */}
-
             <Card
               heading={"What you Want?"}
             >
