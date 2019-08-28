@@ -18,7 +18,7 @@ class MixTapeContainer extends Component {
     result: "",
     search: "",
     selectedSendingPlaylistSearch: "",
-    selectedSendingPlaylistData: "",
+    selectedSendingPlaylistData: [],
     selectedSendingPlaylistDetails: "",
     userData: "",
     books: [],
@@ -294,18 +294,20 @@ class MixTapeContainer extends Component {
     let accessToken = parsed.access_token;
     spotifyApi.setAccessToken(accessToken);
     spotifyApi.addTracksToPlaylist(this.state.selectedSendingPlaylistDetails.id, [`spotify:track:${track.id}`])
-      .then(function (data) {
-        console.log('Added tracks to playlist!');
-      }, function (err) {
-        console.log('Something went wrong!', err);
-      });
+    .then(res => this.getAllTracksSetState(this.state.selectedSendingPlaylistSearch, 'selectedSendingPlaylistData'))
+      .catch(err => console.log(err));
+      // .then(function (data) {
+      //   console.log('Added tracks to playlist!');
+      // }, function (err) {
+      //   console.log('Something went wrong!', err);
+      // });
   };
 
   handleBanSong = track => {
     API.banSong({
       title: track.name,
-      author: track.name,
-      publisher: track.name,
+      author: track.artists.map(artist=> artist.name).join(', '),
+      publisher: this.state.userData.display_name,
       publishedDate: track.name,
       isbnLong: track.uri,
       googleBookListing: track.name
@@ -324,7 +326,7 @@ class MixTapeContainer extends Component {
   };
 
   // When the form is submitted, search the Google Books API for the value of `this.state.search`
-  handleFormSubmit = event => {
+  handleReceivingPlaylistSubmit = event => {
     event.preventDefault();
     console.log(this.state.search);
     this.getAllTracksSetState(this.state.search, 'serverData');
@@ -353,6 +355,7 @@ class MixTapeContainer extends Component {
                   onClickActionBan={this.handleBanSong}
                   onClickActionSave={this.handleSaveSong}
                   isbnInDatabase={this.state.books}
+                  trackInReceivingDatabase={this.state.selectedSendingPlaylistData.items}
                 />
               ) : (
                   <div>
@@ -378,7 +381,7 @@ class MixTapeContainer extends Component {
                 value={this.state.search}
                 handleInputChange={this.handleInputChange}
                 name="search"
-                handleFormSubmit={this.handleFormSubmit}
+                handleFormSubmit={this.handleReceivingPlaylistSubmit}
               />
               <SearchForm
                 description= {this.state.selectedSendingPlaylistDetails.name}

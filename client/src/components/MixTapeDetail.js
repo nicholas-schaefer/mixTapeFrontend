@@ -24,8 +24,11 @@ function MixTapeDetail(props) {
   return (
     <div className="text-center">
       {/* {console.log(props.results.items)} */}
+      {console.log(props.isbnInDatabase)}
+      {console.log(props.trackInReceivingDatabase)}
       {props.results.items.map(result => (
         <div key={result.track.uri} style={(props.isbnInDatabase.some(e => e.isbnLong === result.track.uri)) ? hideStyle : showStyle}>
+          <p>Test ={(props.trackInReceivingDatabase.some(e => e.track.uri === result.track.uri)) ? 'In Database' : 'Ok'}</p>
           {/* <p>Test ={(props.isbnInDatabase.some(e => e.isbnLong === result.track.uri)) ? 'hide' : 'show'}</p>
           <h3>Title: {result.track.name}</h3>
           <h3>URI: {result.track.uri}</h3>
