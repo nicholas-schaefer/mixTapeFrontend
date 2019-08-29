@@ -23,7 +23,8 @@ class MixTapeContainer extends Component {
     userData: "",
     books: [],
     serverData: "",
-    receivingPlaylist: ""
+    receivingPlaylist: "",
+    userPlaylists: []
   };
 
   // When this component mounts, console log what's currently in the MongoDatabase 
@@ -67,6 +68,14 @@ class MixTapeContainer extends Component {
       .then(function (data) {
         console.log('Retrieved playlists', data.body);
       }, function (err) {
+        console.log('Something went wrong!', err);
+      });
+
+    spotifyApi.getUserPlaylists('8n63fm6ayfj03y5qw8jrvtquk')
+     .then(data => this.setState(
+      {
+        userPlaylists: data.body.items
+      }), function (err) {
         console.log('Something went wrong!', err);
       });
 
@@ -304,6 +313,8 @@ class MixTapeContainer extends Component {
   };
 
   handleBanSong = track => {
+    console.log(this.state.userPlaylists)
+    this.state.userPlaylists.map(item => (console.log(item.name)))
     API.banSong({
       title: track.name,
       author: track.artists.map(artist => artist.name).join(', '),
@@ -346,6 +357,10 @@ class MixTapeContainer extends Component {
       <Container>
         <Row>
           <Col size="md-8">
+            
+          {/* {JSON.stringify(this.state.userPlaylists[0])} */}
+          {/* {this.state.userPlaylists.items} ? {this.state.userPlaylists.items[0].name} : <p>nothing here</p> */}
+          {/* {this.state.userData.display_name === "MixTapeMaster"} ? {this.state.userPlaylists.items.map(item => (<p>{item.name}</p>))} : <p>not logged in</p> */}
             <Card
               heading={this.state.receivingPlaylist.name}
             >
@@ -418,6 +433,22 @@ class MixTapeContainer extends Component {
                     </a>
                     <p>Publish Date: {book.publishedDate}</p>
                     <DeleteBtn onClick={() => this.deleteBook(book._id)} />
+                  </ListItem>
+                ))}
+              </List>
+            </Card>
+
+            <Card heading="Playlists Test">
+              <List>
+                {this.state.userPlaylists.map(item => (
+                  <ListItem key={item.id}>
+                    <a href={item.id} target="blank">
+                      <strong>
+                        {item.name} by {item.id}
+                      </strong>
+                    </a>
+                    <p>Publish Date: {item.id}</p>
+                    {/* <DeleteBtn onClick={() => this.deleteBook(book._id)} /> */}
                   </ListItem>
                 ))}
               </List>
