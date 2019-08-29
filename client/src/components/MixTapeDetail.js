@@ -4,9 +4,9 @@ import SpotifyPlayer from 'react-spotify-player';
 function MixTapeDetail(props) {
   // CSS for hiding songs already in our database
   const hideStyle = {
-    // display: 'none',
-    margin: '40px',
-    border: '5px solid blue'
+    display: 'none',
+    // margin: '40px',
+    // border: '5px solid blue'
   };
   const showStyle = {
     // display: 'show',
@@ -27,8 +27,14 @@ function MixTapeDetail(props) {
       {console.log(props.isbnInDatabase)}
       {console.log(props.trackInReceivingDatabase)}
       {props.results.items.map(result => (
-        <div key={result.track.uri} style={(props.isbnInDatabase.some(e => e.isbnLong === result.track.uri)) ? hideStyle : showStyle}>
-          <p>Test ={(props.trackInReceivingDatabase.some(e => e.track.uri === result.track.uri)) ? 'In Database' : 'Ok'}</p>
+        <div
+          key={result.track.uri}
+          style={
+            (props.isbnInDatabase.some(e => e.isbnLong === result.track.uri)) || (props.trackInReceivingDatabase.some(e => e.track.uri === result.track.uri))
+            ? hideStyle
+            : showStyle
+            }>
+          {/* <p>Test ={(props.trackInReceivingDatabase.some(e => e.track.uri === result.track.uri)) ? 'In Database' : 'Ok'}</p> */}
           {/* <p>Test ={(props.isbnInDatabase.some(e => e.isbnLong === result.track.uri)) ? 'hide' : 'show'}</p>
           <h3>Title: {result.track.name}</h3>
           <h3>URI: {result.track.uri}</h3>
@@ -40,15 +46,15 @@ function MixTapeDetail(props) {
             view={view}
             theme={theme}
           />
-          <span 
-            onClick={()=> {props.onClickActionBan(result.track)}}
+          <span
+            onClick={() => { props.onClickActionBan(result.track) }}
             className="btn btn-danger"
             role="button"
             tabIndex="0">
             Banish
           </span>
-          <span 
-            onClick={()=> {props.onClickActionSave(result.track)}}
+          <span
+            onClick={() => { props.onClickActionSave(result.track) }}
             className="btn btn-primary"
             role="button"
             tabIndex="0">
