@@ -56,12 +56,12 @@ class MixTapeContainer extends Component {
 
 
     spotifyApi.getMe()
-    .then(data => this.setState(
-      {
-       userData: data.body
-      }), function (err) {
-        console.log('Something went wrong!', err);
-      });      
+      .then(data => this.setState(
+        {
+          userData: data.body
+        }), function (err) {
+          console.log('Something went wrong!', err);
+        });
 
     spotifyApi.getUserPlaylists('8n63fm6ayfj03y5qw8jrvtquk')
       .then(function (data) {
@@ -130,29 +130,29 @@ class MixTapeContainer extends Component {
 
   };
 
-    getPlaylistDetailsSetState = (trackUri, stateKey) => {
-      var SpotifyWebApi = require('spotify-web-api-node');
-      var spotifyApi = new SpotifyWebApi();
-      let parsed = queryString.parse(window.location.search);
-      let accessToken = parsed.access_token;
-      spotifyApi.setAccessToken(accessToken);
-      let state = stateKey;
-      spotifyApi.getPlaylist(trackUri)
+  getPlaylistDetailsSetState = (trackUri, stateKey) => {
+    var SpotifyWebApi = require('spotify-web-api-node');
+    var spotifyApi = new SpotifyWebApi();
+    let parsed = queryString.parse(window.location.search);
+    let accessToken = parsed.access_token;
+    spotifyApi.setAccessToken(accessToken);
+    let state = stateKey;
+    spotifyApi.getPlaylist(trackUri)
       .then(data => {
-          console.log(state);
-          console.log('The playlist contains these tracks', data.body);
-          this.setState({ [`${state}`]: data.body })
-          console.log(this.state.receivingPlaylist.name);
-        },
+        console.log(state);
+        console.log('The playlist contains these tracks', data.body);
+        this.setState({ [`${state}`]: data.body })
+        console.log(this.state.receivingPlaylist.name);
+      },
         function (err) {
           console.log('Something went wrong!', err);
         }
       );
 
-    }
+  }
 
 
-    getAllTracksSetState = (trackUri, stateKey) => {
+  getAllTracksSetState = (trackUri, stateKey) => {
     let state = stateKey;
     let offsetVal = 0;
     let offsetIncrementer = 0;
@@ -294,19 +294,19 @@ class MixTapeContainer extends Component {
     let accessToken = parsed.access_token;
     spotifyApi.setAccessToken(accessToken);
     spotifyApi.addTracksToPlaylist(this.state.selectedSendingPlaylistDetails.id, [`spotify:track:${track.id}`])
-    .then(res => this.getAllTracksSetState(this.state.selectedSendingPlaylistSearch, 'selectedSendingPlaylistData'))
+      .then(res => this.getAllTracksSetState(this.state.selectedSendingPlaylistSearch, 'selectedSendingPlaylistData'))
       .catch(err => console.log(err));
-      // .then(function (data) {
-      //   console.log('Added tracks to playlist!');
-      // }, function (err) {
-      //   console.log('Something went wrong!', err);
-      // });
+    // .then(function (data) {
+    //   console.log('Added tracks to playlist!');
+    // }, function (err) {
+    //   console.log('Something went wrong!', err);
+    // });
   };
 
   handleBanSong = track => {
     API.banSong({
       title: track.name,
-      author: track.artists.map(artist=> artist.name).join(', '),
+      author: track.artists.map(artist => artist.name).join(', '),
       publisher: this.state.userData.display_name,
       publishedDate: track.name,
       isbnLong: track.uri,
@@ -347,7 +347,7 @@ class MixTapeContainer extends Component {
         <Row>
           <Col size="md-8">
             <Card
-              heading={this.state.receivingPlaylist.name} 
+              heading={this.state.receivingPlaylist.name}
             >
               {this.state.serverData ? (
                 <MixTapeDetail
@@ -374,19 +374,33 @@ class MixTapeContainer extends Component {
           </Col>
           <Col size="md-4">
             <Card heading="Choose Playlists">
+            {this.state.selectedSendingPlaylistDetails ? (
+                <div>
+                <h3>Select Public Playlist</h3>
+              </div>
+              ) : (
+              <div>
+              </div>
+               )}
+              {this.state.selectedSendingPlaylistDetails ? (
+                <SearchForm
+                  description={this.state.receivingPlaylist.name}
+                  placeholder="Public Playlist URI"
+                  buttonText="Submit"
+                  value={this.state.search}
+                  handleInputChange={this.handleInputChange}
+                  name="search"
+                  handleFormSubmit={this.handleReceivingPlaylistSubmit}
+                />
+              ) : (
+                  <div>
+                    <h3>Select Your Playlist</h3>
+                  </div>
+                )}
               <SearchForm
-                description= {this.state.receivingPlaylist.name} 
-                placeholder= "Sending Playlist URI"
-                buttonText= "Submit"
-                value={this.state.search}
-                handleInputChange={this.handleInputChange}
-                name="search"
-                handleFormSubmit={this.handleReceivingPlaylistSubmit}
-              />
-              <SearchForm
-                description= {this.state.selectedSendingPlaylistDetails.name}
-                placeholder= "Receiving Playlist URI"
-                buttonText= "Submit"
+                description={this.state.selectedSendingPlaylistDetails.name}
+                placeholder="Personal Playlist URI"
+                buttonText="Submit"
                 value={this.state.selectedSendingPlaylistSearch}
                 handleInputChange={this.handleInputChange}
                 name="selectedSendingPlaylistSearch"
