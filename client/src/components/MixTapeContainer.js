@@ -72,12 +72,12 @@ class MixTapeContainer extends Component {
       });
 
     spotifyApi.getUserPlaylists('8n63fm6ayfj03y5qw8jrvtquk')
-     .then(data => this.setState(
-      {
-        userPlaylists: data.body.items
-      }), function (err) {
-        console.log('Something went wrong!', err);
-      });
+      .then(data => this.setState(
+        {
+          userPlaylists: data.body.items
+        }), function (err) {
+          console.log('Something went wrong!', err);
+        });
 
     spotifyApi.getPlaylist('3jzUdvQ9mzUZLP08odGSwS')
       .then(
@@ -352,15 +352,20 @@ class MixTapeContainer extends Component {
     this.getPlaylistDetailsSetState(this.state.selectedSendingPlaylistSearch, 'selectedSendingPlaylistDetails');
   };
 
+  handleSendingPlaylistSubmitLink = playlistId => {
+    this.getAllTracksSetState(playlistId, 'selectedSendingPlaylistData');
+    this.getPlaylistDetailsSetState(playlistId, 'selectedSendingPlaylistDetails');
+  };
+
   render() {
     return (
       <Container>
         <Row>
           <Col size="md-8">
-            
-          {/* {JSON.stringify(this.state.userPlaylists[0])} */}
-          {/* {this.state.userPlaylists.items} ? {this.state.userPlaylists.items[0].name} : <p>nothing here</p> */}
-          {/* {this.state.userData.display_name === "MixTapeMaster"} ? {this.state.userPlaylists.items.map(item => (<p>{item.name}</p>))} : <p>not logged in</p> */}
+
+            {/* {JSON.stringify(this.state.userPlaylists[0])} */}
+            {/* {this.state.userPlaylists.items} ? {this.state.userPlaylists.items[0].name} : <p>nothing here</p> */}
+            {/* {this.state.userData.display_name === "MixTapeMaster"} ? {this.state.userPlaylists.items.map(item => (<p>{item.name}</p>))} : <p>not logged in</p> */}
             <Card
               heading={this.state.receivingPlaylist.name}
             >
@@ -389,14 +394,14 @@ class MixTapeContainer extends Component {
           </Col>
           <Col size="md-4">
             <Card heading="Choose Playlists">
-            {this.state.selectedSendingPlaylistDetails ? (
+              {this.state.selectedSendingPlaylistDetails ? (
                 <div>
-                <h3>Select Public Playlist</h3>
-              </div>
+                  <h3>Select Public Playlist</h3>
+                </div>
               ) : (
-              <div>
-              </div>
-               )}
+                  <div>
+                  </div>
+                )}
               {this.state.selectedSendingPlaylistDetails ? (
                 <SearchForm
                   description={this.state.receivingPlaylist.name}
@@ -442,13 +447,21 @@ class MixTapeContainer extends Component {
               <List>
                 {this.state.userPlaylists.map(item => (
                   <ListItem key={item.id}>
-                    <a href={item.id} target="blank">
-                      <strong>
-                        {item.name} by {item.id}
-                      </strong>
-                    </a>
-                    <p>Publish Date: {item.id}</p>
-                    {/* <DeleteBtn onClick={() => this.deleteBook(book._id)} /> */}
+                    <div style={{display: item.owner.id === this.state.userData.id ? '' : 'none' }}>
+                    {/* style = {item.owner.id === this.state.userData.id ? "" : "{{display:none}}"}> */}
+                      <a href={item.id} target="blank">
+                        <strong>
+                          {item.name} by {item.owner.id}
+                        </strong>
+                      </a>
+                      <p>Publish Date: {item.id}</p>
+                      <p>
+                        {/* Match? {item.owner.id} {this.state.userData.id} */}
+                        {item.owner.id === this.state.userData.id ? <p>Yay it's a match</p> : <p>no</p>}
+                      </p>
+                      {/* <DeleteBtn onClick={() => this.deleteBook(book._id)} /> */}
+                      <DeleteBtn onClick={() => this.handleSendingPlaylistSubmitLink(item.id)} />
+                    </div>
                   </ListItem>
                 ))}
               </List>
