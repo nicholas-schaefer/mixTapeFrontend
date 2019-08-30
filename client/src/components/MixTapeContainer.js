@@ -9,6 +9,7 @@ import MixTapeDetail from "./MixTapeDetail";
 import API from "../utils/API";
 import { List, ListItem } from "./List";
 import DeleteBtn from "./DeleteBtn";
+import SelectBtn from "./SelectBtn";
 
 import queryString from 'query-string';
 import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from "constants";
@@ -345,6 +346,12 @@ class MixTapeContainer extends Component {
     // this.searchBooks(this.state.search);
   };
 
+  // handleReceivingPlaylistSubmitLink = playlistId => {
+  //   this.getAllTracksSetState(playlistId, 'serverData');
+  //   this.getPlaylistDetailsSetState(playlistId, 'receivingPlaylist');
+  // };
+  
+
   handleSendingPlaylistSubmit = event => {
     event.preventDefault();
     console.log(this.state.selectedSendingPlaylistSearch);
@@ -403,6 +410,7 @@ class MixTapeContainer extends Component {
                   </div>
                 )}
               {this.state.selectedSendingPlaylistDetails ? (
+                <div>
                 <SearchForm
                   description={this.state.receivingPlaylist.name}
                   placeholder="Public Playlist URI"
@@ -412,6 +420,26 @@ class MixTapeContainer extends Component {
                   name="search"
                   handleFormSubmit={this.handleReceivingPlaylistSubmit}
                 />
+                <List>
+                {this.state.userPlaylists.map(item => (
+                  <ListItem key={item.id}>
+                    <div style={{display: item.owner.id === this.state.userData.id ? 'none' : '' }}>
+                    {/* style = {item.owner.id === this.state.userData.id ? "" : "{{display:none}}"}> */}
+                      {/* <a href={item.id} target="blank"> */}
+                        <strong>
+                          {item.name}
+                        </strong>
+                      {/* </a> */}
+                      {/* <p>Publish Date: {item.id}</p> */}
+                        {/* Match? {item.owner.id} {this.state.userData.id} */}
+                        {/* {item.owner.id === this.state.userData.id ? <p>Yay it's a match</p> : <p>no</p>} */}
+                      {/* <DeleteBtn onClick={() => this.deleteBook(book._id)} /> */}
+                      <SelectBtn onClick={() => this.handleReceivingPlaylistSubmitLink(item.id)} />
+                    </div>
+                  </ListItem>
+                ))}
+              </List>
+                </div>
               ) : (
                   <div>
                     <h3>Select Your Playlist</h3>
@@ -426,6 +454,26 @@ class MixTapeContainer extends Component {
                 name="selectedSendingPlaylistSearch"
                 handleFormSubmit={this.handleSendingPlaylistSubmit}
               />
+              <h4>Your personal playlists</h4>
+                <List>
+                {this.state.userPlaylists.map(item => (
+                  <ListItem key={item.id}>
+                    <div style={{display: item.owner.id === this.state.userData.id ? '' : 'none' }}>
+                    {/* style = {item.owner.id === this.state.userData.id ? "" : "{{display:none}}"}> */}
+                      {/* <a href={item.id} target="blank"> */}
+                        <strong>
+                          {item.name}
+                        </strong>
+                      {/* </a> */}
+                      {/* <p>Publish Date: {item.id}</p> */}
+                        {/* Match? {item.owner.id} {this.state.userData.id} */}
+                        {/* {item.owner.id === this.state.userData.id ? <p>Yay it's a match</p> : <p>no</p>} */}
+                      {/* <DeleteBtn onClick={() => this.deleteBook(book._id)} /> */}
+                      <SelectBtn onClick={() => this.handleSendingPlaylistSubmitLink(item.id)} />
+                    </div>
+                  </ListItem>
+                ))}
+              </List>
             </Card>
             <Card heading="Banished">
               <List>
@@ -438,30 +486,6 @@ class MixTapeContainer extends Component {
                     </a>
                     <p>Publish Date: {book.publishedDate}</p>
                     <DeleteBtn onClick={() => this.deleteBook(book._id)} />
-                  </ListItem>
-                ))}
-              </List>
-            </Card>
-
-            <Card heading="Playlists Test">
-              <List>
-                {this.state.userPlaylists.map(item => (
-                  <ListItem key={item.id}>
-                    <div style={{display: item.owner.id === this.state.userData.id ? '' : 'none' }}>
-                    {/* style = {item.owner.id === this.state.userData.id ? "" : "{{display:none}}"}> */}
-                      <a href={item.id} target="blank">
-                        <strong>
-                          {item.name} by {item.owner.id}
-                        </strong>
-                      </a>
-                      <p>Publish Date: {item.id}</p>
-                      <p>
-                        {/* Match? {item.owner.id} {this.state.userData.id} */}
-                        {item.owner.id === this.state.userData.id ? <p>Yay it's a match</p> : <p>no</p>}
-                      </p>
-                      {/* <DeleteBtn onClick={() => this.deleteBook(book._id)} /> */}
-                      <DeleteBtn onClick={() => this.handleSendingPlaylistSubmitLink(item.id)} />
-                    </div>
                   </ListItem>
                 ))}
               </List>
