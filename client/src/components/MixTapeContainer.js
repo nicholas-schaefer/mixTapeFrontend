@@ -314,8 +314,6 @@ class MixTapeContainer extends Component {
   };
 
   handleBanSong = track => {
-    console.log(this.state.selectedSendingPlaylistSearch);
-    console.log(this.state.userPlaylists)
     this.state.userPlaylists.map(item => (console.log(item.name)))
     API.banSong({
       title: track.name,
@@ -347,10 +345,11 @@ class MixTapeContainer extends Component {
     // this.searchBooks(this.state.search);
   };
 
-  // handleReceivingPlaylistSubmitLink = playlistId => {
-  //   this.getAllTracksSetState(playlistId, 'serverData');
-  //   this.getPlaylistDetailsSetState(playlistId, 'receivingPlaylist');
-  // };
+  handleReceivingPlaylistSubmitLink = playlistId => {
+    this.setState({search: playlistId})
+    this.getAllTracksSetState(playlistId, 'serverData');
+    this.getPlaylistDetailsSetState(playlistId, 'receivingPlaylist');
+  };
   
 
   handleSendingPlaylistSubmit = event => {
