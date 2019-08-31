@@ -43,14 +43,7 @@ class MixTapeContainer extends Component {
           console.log('Something went wrong!', err);
         });
 
-    spotifyApi.getUserPlaylists('8n63fm6ayfj03y5qw8jrvtquk')
-      .then(function (data) {
-        console.log('Retrieved playlists', data.body);
-      }, function (err) {
-        console.log('Something went wrong!', err);
-      });
-
-    spotifyApi.getUserPlaylists('8n63fm6ayfj03y5qw8jrvtquk')
+    spotifyApi.getUserPlaylists(this.state.userData.id)
       .then(data => this.setState(
         {
           userPlaylists: data.body.items
