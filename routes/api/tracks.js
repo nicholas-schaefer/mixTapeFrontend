@@ -1,12 +1,12 @@
 const router = require("express").Router();
 const mixtapeController = require("../../controllers/mixtapeController");
 
-// Matches with "/api/books"
+// Matches with "/api/tracks"
 router.route("/")
   .get(mixtapeController.findAll)
   .post(mixtapeController.create);
 
-// Matches with "/api/books/:id"
+// Matches with "/api/tracks/:id"
 router
   .route("/:id")
   .get(mixtapeController.findById)
