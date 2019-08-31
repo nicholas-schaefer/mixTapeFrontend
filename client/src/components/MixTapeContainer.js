@@ -36,6 +36,11 @@ class MixTapeContainer extends Component {
     spotifyApi.setAccessToken(accessToken);
 
     spotifyApi.getMe()
+      .then(data => this.viewMongoDbData(data.body.id), function (err) {
+          console.log('Something went wrong!', err);
+        });
+
+    spotifyApi.getMe()
       .then(data => this.setState(
         {
           userData: data.body
@@ -49,7 +54,8 @@ class MixTapeContainer extends Component {
           userPlaylists: data.body.items
         }), function (err) {
           console.log('Something went wrong!', err);
-        });
+        }
+        );
   };
 
   getPlaylistDetailsSetState = (trackUri, stateKey) => {
@@ -117,8 +123,9 @@ class MixTapeContainer extends Component {
   }
 
 
-  viewMongoDbData = () => {
-    API.getSongs()
+  viewMongoDbData = (a) => {
+    console.log(a)
+    API.getSongs(a)
       .then(res => this.setState({ banishedSongs: res.data }))
       .catch(err => console.log(err));
   };
@@ -151,7 +158,7 @@ class MixTapeContainer extends Component {
       userId: this.state.userData.id,
       trackId: track.uri,
     })
-      .then(res => this.viewMongoDbData())
+      .then(res => this.viewMongoDbData(this.state.userData.id))
       .catch(err => console.log(err));
     console.log(track)
   };

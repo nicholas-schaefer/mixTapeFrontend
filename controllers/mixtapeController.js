@@ -2,9 +2,16 @@ const db = require("../models");
 
 // Defining methods for the booksController
 module.exports = {
+  // findAll: function(req, res) {
+  //   db.Track
+  //     .find(req.query)
+  //     .sort({ title: 1 })
+  //     .then(dbModel => res.json(dbModel))
+  //     .catch(err => res.status(422).json(err));
+  // },
   findAll: function(req, res) {
     db.Track
-      .find(req.query)
+      .find({ userId: req.query.q })
       .sort({ title: 1 })
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
