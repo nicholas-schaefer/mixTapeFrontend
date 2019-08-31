@@ -9,9 +9,8 @@ import API from "../utils/API";
 import { List, ListItem } from "./List";
 import DeleteBtn from "./DeleteBtn";
 import SelectBtn from "./SelectBtn";
-
 import queryString from 'query-string';
-import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from "constants";
+
 
 class MixTapeContainer extends Component {
   state = {
@@ -21,7 +20,7 @@ class MixTapeContainer extends Component {
     selectedSendingPlaylistData: [],
     selectedSendingPlaylistDetails: "",
     userData: "",
-    books: [],
+    banishedSongs: [],
     serverData: "",
     receivingPlaylist: "",
     userPlaylists: []
@@ -58,7 +57,6 @@ class MixTapeContainer extends Component {
         }), function (err) {
           console.log('Something went wrong!', err);
         });
-
   };
 
   getPlaylistDetailsSetState = (trackUri, stateKey) => {
@@ -125,44 +123,15 @@ class MixTapeContainer extends Component {
     getPlaylists(offsetVal, trackUri, stateKey);
   }
 
-  handleUserDisplay = () => {
-    var SpotifyWebApi = require('spotify-web-api-node');
-    var spotifyApi = new SpotifyWebApi();
-    let parsed = queryString.parse(window.location.search);
-    let accessToken = parsed.access_token;
-    let name = '';
-    spotifyApi.setAccessToken(accessToken);
-
-    console.log(this.state.serverData);
-  };
 
   viewMongoDbData = () => {
-    API.getBooks()
-      .then(res => this.setState({ books: res.data }))
+    API.getSongs()
+      .then(res => this.setState({ banishedSongs: res.data }))
       .catch(err => console.log(err));
   };
 
-  searchBooks = query => {
-    API.search(query)
-      .then(res => this.setState({ result: res.data }))
-      .catch(err => console.log(err));
-  };
-
-  deleteBook = id => {
-    API.deleteBook(id)
-      .then(res => this.viewMongoDbData())
-      .catch(err => console.log(err));
-  };
-
-  handleAddSubmit = volumeInfo => {
-    API.saveBook({
-      title: volumeInfo.title,
-      author: volumeInfo.authors[0],
-      publisher: volumeInfo.publisher,
-      publishedDate: volumeInfo.publishedDate,
-      isbnLong: (volumeInfo.industryIdentifiers[1] == null) ? 'undefined' : volumeInfo.industryIdentifiers[1].identifier,
-      googleBookListing: volumeInfo.canonicalVolumeLink
-    })
+  deleteSong = id => {
+    API.deleteSong(id)
       .then(res => this.viewMongoDbData())
       .catch(err => console.log(err));
   };
@@ -215,7 +184,6 @@ class MixTapeContainer extends Component {
     this.getPlaylistDetailsSetState(playlistId, 'receivingPlaylist');
   };
   
-
   handleSendingPlaylistSubmit = event => {
     event.preventDefault();
     console.log(this.state.selectedSendingPlaylistSearch);
@@ -242,7 +210,7 @@ class MixTapeContainer extends Component {
                   results={this.state.serverData}
                   onClickActionBan={this.handleBanSong}
                   onClickActionSave={this.handleSaveSong}
-                  trackInDatabase={this.state.books}
+                  trackInDatabase={this.state.banishedSongs}
                   trackInReceivingDatabase={this.state.selectedSendingPlaylistData.items}
                   userIdCurrentlyLoggedIn={this.state.userData.id}
                 />
@@ -314,16 +282,9 @@ class MixTapeContainer extends Component {
                 {this.state.userPlaylists.map(item => (
                   <ListItem key={item.id}>
                     <div style={{display: item.owner.id === this.state.userData.id ? '' : 'none' }}>
-                    {/* style = {item.owner.id === this.state.userData.id ? "" : "{{display:none}}"}> */}
-                      {/* <a href={item.id} target="blank"> */}
                         <strong>
                           {item.name}
                         </strong>
-                      {/* </a> */}
-                      {/* <p>Publish Date: {item.id}</p> */}
-                        {/* Match? {item.owner.id} {this.state.userData.id} */}
-                        {/* {item.owner.id === this.state.userData.id ? <p>Yay it's a match</p> : <p>no</p>} */}
-                      {/* <DeleteBtn onClick={() => this.deleteBook(book._id)} /> */}
                       <SelectBtn onClick={() => this.handleSendingPlaylistSubmitLink(item.id)} />
                     </div>
                   </ListItem>
@@ -332,15 +293,12 @@ class MixTapeContainer extends Component {
             </Card>
             <Card heading="Banished">
               <List>
-                {this.state.books.map(book => (
-                  <ListItem key={book._id}>
-                    <a href={book.googleBookListing} target="blank">
+                {this.state.banishedSongs.map(banishedTrack => (
+                  <ListItem key={banishedTrack._id}>
                       <strong>
-                        {book.title} by {book.author}
+                        {banishedTrack.title} by {banishedTrack.artists}
                       </strong>
-                    </a>
-                    <p>Publish Date: {book.publishedDate}</p>
-                    <DeleteBtn onClick={() => this.deleteBook(book._id)} />
+                    <DeleteBtn onClick={() => this.deleteSong(banishedTrack._id)} />
                   </ListItem>
                 ))}
               </List>
