@@ -4,7 +4,6 @@ import Row from "./Row";
 import Col from "./Col";
 import Card from "./Card";
 import SearchForm from "./SearchForm";
-import BookDetail from "./BookDetail";
 import MixTapeDetail from "./MixTapeDetail";
 import API from "../utils/API";
 import { List, ListItem } from "./List";
@@ -37,23 +36,6 @@ class MixTapeContainer extends Component {
     let accessToken = parsed.access_token;
     spotifyApi.setAccessToken(accessToken);
 
-    // spotifyApi.getMe()
-    // .then(data => this.setState({
-    //   serverData: {
-    //   user: {
-    //     name: data.body.display_name
-    //   }
-    //   }}), function (err) {
-    //   console.log('Something went wrong!', err);
-    // });
-
-    // spotifyApi.getMe()
-    // .then(data => this.setState(
-    //   {
-    //    serverData: data.body.display_name
-    //   }))
-
-
     spotifyApi.getMe()
       .then(data => this.setState(
         {
@@ -77,64 +59,6 @@ class MixTapeContainer extends Component {
           console.log('Something went wrong!', err);
         });
 
-    spotifyApi.getPlaylist('3jzUdvQ9mzUZLP08odGSwS')
-      .then(
-        function (data) {
-          console.log('PLAYLIST DATA', data.body);
-        },
-        function (err) {
-          console.log('Something went wrong!', err);
-        }
-      );
-
-    spotifyApi.getPlaylistTracks('37i9dQZF1DWZQaaqNMbbXa')
-      .then(
-        function (data) {
-          console.log('The playlist contains these tracks', data.body);
-        },
-        function (err) {
-          console.log('Something went wrong!', err);
-        }
-      );
-
-    // let getAllTracksSetState = (trackUri, stateKey) => {
-    //   let state = stateKey;
-    //   let offsetVal = 0;
-    //   let offsetIncrementer = 0;
-    //   const myPersonalPlaylistTracks = [];
-    //   var final = {
-    //     items: []
-    //   };
-    //   let getPlaylists = (offsetVal, trackUri) => {
-    //     spotifyApi.getPlaylistTracks(trackUri, { limit: 100, offset: offsetVal })
-    //       .then(data => {
-    //         if (data.body.next != null) {
-    //           console.log("On we Go!")
-    //           data.body.items.forEach(function (val, index) {
-    //             myPersonalPlaylistTracks.push(val);
-    //           });
-    //           offsetIncrementer += 100;
-    //           getPlaylists(offsetIncrementer, trackUri)
-    //         } else {
-    //           console.log("End of the Road!")
-    //           data.body.items.forEach(function (val, index) {
-    //             myPersonalPlaylistTracks.push(val);
-    //             final.items = myPersonalPlaylistTracks;
-    //           });
-    //           console.log('The playlist contains these tracks', myPersonalPlaylistTracks)
-    //           console.log('The playlist contains these tracks', final)
-    //           this.setState({ [`${state}`]: final })
-    //         }
-    //       },
-    //         function (err) {
-    //           console.log('Something went wrong!', err);
-    //         }
-    //       );
-    //   }
-    //   getPlaylists(offsetVal, trackUri, stateKey);
-    // }
-    // getAllTracksSetState('37i9dQZF1DWZQaaqNMbbXa', 'serverData');
-
   };
 
   getPlaylistDetailsSetState = (trackUri, stateKey) => {
@@ -155,7 +79,6 @@ class MixTapeContainer extends Component {
           console.log('Something went wrong!', err);
         }
       );
-
   }
 
   getAllTracksSetState = (trackUri, stateKey) => {
@@ -201,21 +124,6 @@ class MixTapeContainer extends Component {
     }
     getPlaylists(offsetVal, trackUri, stateKey);
   }
-
-  handleSongAdd = () => {
-    var SpotifyWebApi = require('spotify-web-api-node');
-    var spotifyApi = new SpotifyWebApi();
-    let parsed = queryString.parse(window.location.search);
-    let accessToken = parsed.access_token;
-    spotifyApi.setAccessToken(accessToken);
-    spotifyApi.addTracksToPlaylist('4Xphi5ngSLqvbgsWQmsTvk', ["spotify:track:4iV5W9uYEdYUVa79Axb7Rh", "spotify:track:1301WleyT98MSxVHPZCA6M"])
-      .then(function (data) {
-        console.log('Added tracks to playlist!');
-      }, function (err) {
-        console.log('Something went wrong!', err);
-      });
-
-  };
 
   handleUserDisplay = () => {
     var SpotifyWebApi = require('spotify-web-api-node');
@@ -378,16 +286,9 @@ class MixTapeContainer extends Component {
                 {this.state.userPlaylists.map(item => (
                   <ListItem key={item.id}>
                     <div style={{display: item.owner.id === this.state.userData.id ? 'none' : '' }}>
-                    {/* style = {item.owner.id === this.state.userData.id ? "" : "{{display:none}}"}> */}
-                      {/* <a href={item.id} target="blank"> */}
                         <strong>
                           {item.name}
                         </strong>
-                      {/* </a> */}
-                      {/* <p>Publish Date: {item.id}</p> */}
-                        {/* Match? {item.owner.id} {this.state.userData.id} */}
-                        {/* {item.owner.id === this.state.userData.id ? <p>Yay it's a match</p> : <p>no</p>} */}
-                      {/* <DeleteBtn onClick={() => this.deleteBook(book._id)} /> */}
                       <SelectBtn onClick={() => this.handleReceivingPlaylistSubmitLink(item.id)} />
                     </div>
                   </ListItem>
