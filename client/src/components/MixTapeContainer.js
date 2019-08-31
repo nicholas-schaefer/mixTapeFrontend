@@ -387,7 +387,7 @@ class MixTapeContainer extends Component {
                   results={this.state.serverData}
                   onClickActionBan={this.handleBanSong}
                   onClickActionSave={this.handleSaveSong}
-                  isbnInDatabase={this.state.books}
+                  trackInDatabase={this.state.books}
                   trackInReceivingDatabase={this.state.selectedSendingPlaylistData.items}
                 />
               ) : (

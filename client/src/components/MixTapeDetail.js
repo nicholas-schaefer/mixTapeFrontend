@@ -24,18 +24,18 @@ function MixTapeDetail(props) {
   return (
     <div className="text-center">
       {/* {console.log(props.results.items)} */}
-      {console.log(props.isbnInDatabase)}
+      {console.log(props.trackInDatabase)}
       {console.log(props.trackInReceivingDatabase)}
       {props.results.items.map(result => (
         <div
           key={result.track.uri}
           style={
-            (props.isbnInDatabase.some(e => e.trackId === result.track.uri)) || (props.trackInReceivingDatabase.some(e => e.track.uri === result.track.uri))
+            (props.trackInDatabase.some(e => e.trackId === result.track.uri)) || (props.trackInReceivingDatabase.some(e => e.track.uri === result.track.uri))
             ? hideStyle
             : showStyle
             }>
           {/* <p>Test ={(props.trackInReceivingDatabase.some(e => e.track.uri === result.track.uri)) ? 'In Database' : 'Ok'}</p> */}
-          {/* <p>Test ={(props.isbnInDatabase.some(e => e.trackId === result.track.uri)) ? 'hide' : 'show'}</p>
+          {/* <p>Test ={(props.trackInDatabase.some(e => e.trackId === result.track.uri)) ? 'hide' : 'show'}</p>
           <h3>Title: {result.track.name}</h3>
           <h3>URI: {result.track.uri}</h3>
           <h3>Spotify Urls: {result.track.external_urls.spotify}</h3> */}
