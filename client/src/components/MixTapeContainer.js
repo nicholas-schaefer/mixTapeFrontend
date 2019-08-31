@@ -317,11 +317,16 @@ class MixTapeContainer extends Component {
     this.state.userPlaylists.map(item => (console.log(item.name)))
     API.banSong({
       title: track.name,
-      author: track.artists.map(artist => artist.name).join(', '),
-      publisher: this.state.userData.display_name,
-      publishedDate: track.name,
-      isbnLong: track.uri,
-      googleBookListing: track.name
+      artists: track.artists.map(artist => artist.name).join(', '),
+      userName: this.state.userData.display_name,
+      userId: this.state.userData.id,
+      trackId: track.uri,
+      // title: track.name,
+      // author: track.artists.map(artist => artist.name).join(', '),
+      // publisher: this.state.userData.display_name,
+      // publishedDate: this.state.userData.id,
+      // isbnLong: track.uri,
+      // googleBookListing: track.name
     })
       .then(res => this.viewMongoDbData())
       .catch(err => console.log(err));
