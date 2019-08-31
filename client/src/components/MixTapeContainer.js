@@ -28,14 +28,11 @@ class MixTapeContainer extends Component {
     userPlaylists: []
   };
 
-  // When this component mounts, console log what's currently in the MongoDatabase 
-  // and populate example search with author Dav Pilkey 
   componentDidMount() {
     var SpotifyWebApi = require('spotify-web-api-node');
     var spotifyApi = new SpotifyWebApi();
 
     this.viewMongoDbData()
-    // this.searchBooks("Dav+Pilkey");
     let parsed = queryString.parse(window.location.search);
     let accessToken = parsed.access_token;
     spotifyApi.setAccessToken(accessToken);
@@ -161,7 +158,6 @@ class MixTapeContainer extends Component {
 
   }
 
-
   getAllTracksSetState = (trackUri, stateKey) => {
     let state = stateKey;
     let offsetVal = 0;
@@ -206,7 +202,6 @@ class MixTapeContainer extends Component {
     getPlaylists(offsetVal, trackUri, stateKey);
   }
 
-
   handleSongAdd = () => {
     var SpotifyWebApi = require('spotify-web-api-node');
     var spotifyApi = new SpotifyWebApi();
@@ -231,37 +226,7 @@ class MixTapeContainer extends Component {
     spotifyApi.setAccessToken(accessToken);
 
     console.log(this.state.serverData);
-    // spotifyApi.getMe()
-    //   .then(data => {
-    //     name = data.body.display_name
-    //     this.setState({
-    //       serverData: {
-    //         user: {
-    //           name
-    //         }
-    //       }
-    //     })
-    //   })
-    // spotifyApi.getPlaylistTracks('37i9dQZF1DWYtg7TV07mgz')
-    //   .then(data => this.setState({
-    //     serverData: {
-    //       playlists: {
-    //         title: data.body.items[0].track.name,
-    //         uri: data.body.items[0].track.uri,
-    //         artists: data.body.items[0].track.artists[0].name
-    //       },
-    //       user: {
-    //         name
-    //       }
-    //     }
-    //   }))
-
-    // spotifyApi.getPlaylistTracks('37i9dQZF1DWYtg7TV07mgz')
-    //   .then(data => this.setState({serverData: data.body}))
-    //   console.log(this.state.serverData);
   };
-
-
 
   viewMongoDbData = () => {
     API.getBooks()
@@ -275,7 +240,6 @@ class MixTapeContainer extends Component {
       .catch(err => console.log(err));
   };
 
-  // Deletes a book from the database with a given id, then reloads books from the db
   deleteBook = id => {
     API.deleteBook(id)
       .then(res => this.viewMongoDbData())
@@ -293,7 +257,6 @@ class MixTapeContainer extends Component {
     })
       .then(res => this.viewMongoDbData())
       .catch(err => console.log(err));
-    // console.log(volumeInfo)
   };
 
   handleSaveSong = track => {
@@ -306,27 +269,17 @@ class MixTapeContainer extends Component {
     spotifyApi.addTracksToPlaylist(this.state.selectedSendingPlaylistDetails.id, [`spotify:track:${track.id}`])
       .then(res => this.getAllTracksSetState(this.state.selectedSendingPlaylistSearch, 'selectedSendingPlaylistData'))
       .catch(err => console.log(err));
-    // .then(function (data) {
-    //   console.log('Added tracks to playlist!');
-    // }, function (err) {
-    //   console.log('Something went wrong!', err);
-    // });
   };
 
   handleBanSong = track => {
     this.state.userPlaylists.map(item => (console.log(item.name)))
+    console.log(this.state.userData.id)
     API.banSong({
       title: track.name,
       artists: track.artists.map(artist => artist.name).join(', '),
       userName: this.state.userData.display_name,
       userId: this.state.userData.id,
       trackId: track.uri,
-      // title: track.name,
-      // author: track.artists.map(artist => artist.name).join(', '),
-      // publisher: this.state.userData.display_name,
-      // publishedDate: this.state.userData.id,
-      // isbnLong: track.uri,
-      // googleBookListing: track.name
     })
       .then(res => this.viewMongoDbData())
       .catch(err => console.log(err));
@@ -341,13 +294,11 @@ class MixTapeContainer extends Component {
     });
   };
 
-  // When the form is submitted, search the Google Books API for the value of `this.state.search`
   handleReceivingPlaylistSubmit = event => {
     event.preventDefault();
     console.log(this.state.search);
     this.getAllTracksSetState(this.state.search, 'serverData');
     this.getPlaylistDetailsSetState(this.state.search, 'receivingPlaylist');
-    // this.searchBooks(this.state.search);
   };
 
   handleReceivingPlaylistSubmitLink = playlistId => {
@@ -375,10 +326,6 @@ class MixTapeContainer extends Component {
       <Container>
         <Row>
           <Col size="md-8">
-
-            {/* {JSON.stringify(this.state.userPlaylists[0])} */}
-            {/* {this.state.userPlaylists.items} ? {this.state.userPlaylists.items[0].name} : <p>nothing here</p> */}
-            {/* {this.state.userData.display_name === "MixTapeMaster"} ? {this.state.userPlaylists.items.map(item => (<p>{item.name}</p>))} : <p>not logged in</p> */}
             <Card
               heading={this.state.receivingPlaylist.name}
             >
@@ -389,6 +336,7 @@ class MixTapeContainer extends Component {
                   onClickActionSave={this.handleSaveSong}
                   trackInDatabase={this.state.books}
                   trackInReceivingDatabase={this.state.selectedSendingPlaylistData.items}
+                  userIdCurrentlyLoggedIn={this.state.userData.id}
                 />
               ) : (
                   <div>
