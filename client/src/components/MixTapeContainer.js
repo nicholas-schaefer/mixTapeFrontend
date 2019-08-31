@@ -123,16 +123,16 @@ class MixTapeContainer extends Component {
   }
 
 
-  viewMongoDbData = (a) => {
-    console.log(a)
-    API.getSongs(a)
+  viewMongoDbData = (currentUserId) => {
+    console.log(currentUserId)
+    API.getSongs(currentUserId)
       .then(res => this.setState({ banishedSongs: res.data }))
       .catch(err => console.log(err));
   };
 
   deleteSong = id => {
     API.deleteSong(id)
-      .then(res => this.viewMongoDbData())
+      .then(res => this.viewMongoDbData(this.state.userData.id))
       .catch(err => console.log(err));
   };
 

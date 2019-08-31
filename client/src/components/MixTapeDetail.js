@@ -34,13 +34,13 @@ function MixTapeDetail(props) {
             ? hideStyle
             : showStyle
             }>
-          {/* <p>Test ={(props.trackInReceivingDatabase.some(e => e.track.uri === result.track.uri)) ? 'In Database' : 'Ok'}</p> */}
-          {/* <p>Test ={(props.trackInDatabase.some(e => e.trackId === result.track.uri)) ? 'hide' : 'show'}</p>
+          {/* <p>Test ={(props.trackInReceivingDatabase.some(e => e.track.uri === result.track.uri)) ? 'In Database' : 'Ok'}</p>
+          <p>Test ={(props.trackInDatabase.some(e => e.trackId === result.track.uri)) ? 'hide' : 'show'}</p>
           <h3>Title: {result.track.name}</h3>
           <h3>URI: {result.track.uri}</h3>
-          <h3>Spotify Urls: {result.track.external_urls.spotify}</h3> */}
+          <h3>Spotify Urls: {result.track.external_urls.spotify}</h3>
            <h3>userIdCurrentlyLoggedIn {props.userIdCurrentlyLoggedIn}</h3>
-           <h3>Test ={(props.trackInDatabase.some(e => e.userId === props.userIdCurrentlyLoggedIn)) ? 'True' : 'False'} </h3>
+           <h3>Test ={(props.trackInDatabase.some(e => e.userId === props.userIdCurrentlyLoggedIn)) ? 'True' : 'False'} </h3> */}
           <SpotifyPlayer
             // uri={result.track.external_urls.spotify}
             uri={result.track.uri}
