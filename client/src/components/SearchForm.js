@@ -4,7 +4,7 @@ function SearchForm(props) {
   return (
     <form>
       <div className="form-group">
-        <label htmlFor="search">{props.description}</label>
+        <label htmlFor="search"><h3 style={{backgroundColor: "coral"}}>{props.description}</h3></label>
         <input
           onChange={props.handleInputChange}
           value={props.value}

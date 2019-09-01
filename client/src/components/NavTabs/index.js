@@ -1,5 +1,16 @@
 import React from "react";
+import "./style.css";
 import { Link } from "react-router-dom";
+
+
+let func1 = () => {
+window.open('https://accounts.spotify.com/en/logout', '_blank' )
+}
+
+let func2 = () => {
+  window.location = window.location.origin
+}
+
 
 function NavTabs() {
   return (
@@ -14,17 +25,18 @@ function NavTabs() {
       </li>
       <li className="nav-item">
         <Link to="/search" className={window.location.pathname === "/" ? "nav-link active" : "nav-link"}>
-          Search
+          Spotify Sign Out
         </Link>
       </li>
-      <li className="nav-item">
-        <Link
-          to="/saved"
-          className={window.location.pathname === "/saved" ? "nav-link active" : "nav-link"}
-        >
-          Saved
-        </Link>
-      </li>
+      <span className="navbar-text">
+        {/* <button  className="signout" onClick={() => 
+      window.open('https://www.google.com', '_blank' )
+      }>
+         Log Out 
+         </button> */}
+        <button className="signout" onClick={function(event){ func1(); func2()}}>Spotify Sign Out
+         </button>
+      </span>
     </ul>
   );
 }

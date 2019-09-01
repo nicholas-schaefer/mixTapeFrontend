@@ -206,7 +206,7 @@ class MixTapeContainer extends Component {
                 />
               ) : (
                   <div>
-                    <h3>Welcome to MixTape {this.state.userData.display_name}</h3>
+                    <h3>Welcome to MixTape: <span style={{backgroundColor: "coral"}}>{this.state.userData.display_name}</span></h3>
                     <p>Click Login Button to Begin!</p>
                   </div>
                 )}
@@ -220,7 +220,7 @@ class MixTapeContainer extends Component {
             </Card>
           </Col>
           <Col size="md-4">
-            <Card heading="Choose Playlists">
+            <Card heading="Playlists">
               {this.state.selectedSendingPlaylistDetails ? (
                 <div>
                   <h3>Select Public Playlist</h3>
@@ -240,6 +240,7 @@ class MixTapeContainer extends Component {
                   name="search"
                   handleFormSubmit={this.handleReceivingPlaylistSubmit}
                 />
+                <h5>Your saved public playlists</h5>
                 <List>
                 {this.state.userPlaylists.map(item => (
                   <div key={item.id} style={{display: item.owner.id === this.state.userData.id ? 'none' : '' }}>
@@ -267,7 +268,7 @@ class MixTapeContainer extends Component {
                 name="selectedSendingPlaylistSearch"
                 handleFormSubmit={this.handleSendingPlaylistSubmit}
               />
-              <h4>Your personal playlists</h4>
+              <h5>Your personal playlists</h5>
                 <List>
                 {this.state.userPlaylists.map(item => (
                   <div key={item.id} style={{display: item.owner.id === this.state.userData.id ? '' : 'none' }}>
@@ -281,12 +282,16 @@ class MixTapeContainer extends Component {
                 ))}
               </List>
             </Card>
-            <Card heading="Banished">
+            <Card heading="Banished Songs">
               <List>
                 {this.state.banishedSongs.map(banishedTrack => (
                   <ListItem key={banishedTrack._id}>
                       <strong>
-                        {banishedTrack.title} by {banishedTrack.artists}
+                        <u>
+                        {banishedTrack.title} 
+                        </u>
+                        <br/>
+                        by {banishedTrack.artists}
                       </strong>
                     <DeleteBtn onClick={() => this.deleteSong(banishedTrack._id)} />
                   </ListItem>
