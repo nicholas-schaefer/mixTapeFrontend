@@ -27,18 +27,19 @@ class MixTapeContainer extends Component {
   };
 
   componentDidMount() {
-    var SpotifyWebApi = require('spotify-web-api-node');
-    var spotifyApi = new SpotifyWebApi();
-
-    this.viewMongoDbData()
+    let SpotifyWebApi = require('spotify-web-api-node');
+    let spotifyApi = new SpotifyWebApi();
     let parsed = queryString.parse(window.location.search);
     let accessToken = parsed.access_token;
-    spotifyApi.setAccessToken(accessToken);
+    
+    this.viewMongoDbData()
 
+    spotifyApi.setAccessToken(accessToken);
+    
     spotifyApi.getMe()
       .then(data => this.viewMongoDbData(data.body.id), function (err) {
           console.log('Something went wrong!', err);
-        });
+        })
 
     spotifyApi.getMe()
       .then(data => this.setState(
@@ -59,18 +60,16 @@ class MixTapeContainer extends Component {
   };
 
   getPlaylistDetailsSetState = (trackUri, stateKey) => {
-    var SpotifyWebApi = require('spotify-web-api-node');
-    var spotifyApi = new SpotifyWebApi();
+    let SpotifyWebApi = require('spotify-web-api-node');
+    let spotifyApi = new SpotifyWebApi();
     let parsed = queryString.parse(window.location.search);
     let accessToken = parsed.access_token;
     spotifyApi.setAccessToken(accessToken);
     let state = stateKey;
     spotifyApi.getPlaylist(trackUri)
       .then(data => {
-        console.log(state);
-        console.log('The playlist contains these tracks', data.body);
+        console.log('Selected Playlist Details', data.body);
         this.setState({ [`${state}`]: data.body })
-        console.log(this.state.receivingPlaylist.name);
       },
         function (err) {
           console.log('Something went wrong!', err);
@@ -83,12 +82,12 @@ class MixTapeContainer extends Component {
     let offsetVal = 0;
     let offsetIncrementer = 0;
     const myPersonalPlaylistTracks = [];
-    var final = {
+    let final = {
       items: []
     };
     let getPlaylists = (offsetVal, trackUri) => {
-      var SpotifyWebApi = require('spotify-web-api-node');
-      var spotifyApi = new SpotifyWebApi();
+      let SpotifyWebApi = require('spotify-web-api-node');
+      let spotifyApi = new SpotifyWebApi();
       let parsed = queryString.parse(window.location.search);
       let accessToken = parsed.access_token;
       spotifyApi.setAccessToken(accessToken);
@@ -102,16 +101,12 @@ class MixTapeContainer extends Component {
             offsetIncrementer += 100;
             getPlaylists(offsetIncrementer, trackUri)
           } else {
-            console.log("End of the Road!")
             data.body.items.forEach(function (val, index) {
               myPersonalPlaylistTracks.push(val);
               final.items = myPersonalPlaylistTracks;
             });
-            console.log('The playlist contains these tracks', myPersonalPlaylistTracks)
-            console.log('The playlist contains these tracks', final)
+            console.log('Selected Playlist Contains These Tracks', final)
             this.setState({ [`${state}`]: final })
-            console.log(this.state.selectedSendingPlaylistData);
-            console.log(this.state.selectedSendingPlaylistDetails);
           }
         },
           function (err) {
@@ -124,7 +119,6 @@ class MixTapeContainer extends Component {
 
 
   viewMongoDbData = (currentUserId) => {
-    console.log(currentUserId)
     API.getSongs(currentUserId)
       .then(res => this.setState({ banishedSongs: res.data }))
       .catch(err => console.log(err));
@@ -137,9 +131,8 @@ class MixTapeContainer extends Component {
   };
 
   handleSaveSong = track => {
-    console.log(track.id)
-    var SpotifyWebApi = require('spotify-web-api-node');
-    var spotifyApi = new SpotifyWebApi();
+    let SpotifyWebApi = require('spotify-web-api-node');
+    let spotifyApi = new SpotifyWebApi();
     let parsed = queryString.parse(window.location.search);
     let accessToken = parsed.access_token;
     spotifyApi.setAccessToken(accessToken);
@@ -149,8 +142,6 @@ class MixTapeContainer extends Component {
   };
 
   handleBanSong = track => {
-    this.state.userPlaylists.map(item => (console.log(item.name)))
-    console.log(this.state.userData.id)
     API.banSong({
       title: track.name,
       artists: track.artists.map(artist => artist.name).join(', '),
@@ -160,7 +151,6 @@ class MixTapeContainer extends Component {
     })
       .then(res => this.viewMongoDbData(this.state.userData.id))
       .catch(err => console.log(err));
-    console.log(track)
   };
 
   handleInputChange = event => {

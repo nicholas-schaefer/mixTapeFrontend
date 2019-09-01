@@ -3,7 +3,7 @@ import axios from "axios";
 export default {
   // Gets all songs
   getSongs: function(loggedInUserId) {
-  return axios.get("/api/tracks/" + "/?q=" + loggedInUserId);
+  return axios.get("/api/tracks/?q=" + loggedInUserId);
   },
   // Saves track to the database
   banSong: function(trackData) {

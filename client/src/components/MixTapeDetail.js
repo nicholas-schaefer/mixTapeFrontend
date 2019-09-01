@@ -9,7 +9,6 @@ function MixTapeDetail(props) {
     // border: '5px solid blue'
   };
   const showStyle = {
-    // display: 'show',
     margin: '40px',
     border: '5px solid pink'
   };
@@ -19,13 +18,12 @@ function MixTapeDetail(props) {
     width: '100%',
     height: 80,
   };
-  const view = 'list'; // or 'coverart'
-  const theme = 'black'; // or 'white'
+  const view = 'list';
+  const theme = 'black';
   return (
     <div className="text-center">
-      {/* {console.log(props.results.items)} */}
-      {console.log(props.trackInDatabase)}
-      {console.log(props.trackInReceivingDatabase)}
+      {console.log("Songs Currently in Personal Playlist", props.trackInReceivingDatabase)}
+      {console.log("Songs Currently in Banished Database", props.trackInDatabase)}
       {props.results.items.map(result => (
         <div
           key={result.track.uri}
@@ -34,15 +32,7 @@ function MixTapeDetail(props) {
             ? hideStyle
             : showStyle
             }>
-          {/* <p>Test ={(props.trackInReceivingDatabase.some(e => e.track.uri === result.track.uri)) ? 'In Database' : 'Ok'}</p>
-          <p>Test ={(props.trackInDatabase.some(e => e.trackId === result.track.uri)) ? 'hide' : 'show'}</p>
-          <h3>Title: {result.track.name}</h3>
-          <h3>URI: {result.track.uri}</h3>
-          <h3>Spotify Urls: {result.track.external_urls.spotify}</h3>
-           <h3>userIdCurrentlyLoggedIn {props.userIdCurrentlyLoggedIn}</h3>
-           <h3>Test ={(props.trackInDatabase.some(e => e.userId === props.userIdCurrentlyLoggedIn)) ? 'True' : 'False'} </h3> */}
           <SpotifyPlayer
-            // uri={result.track.external_urls.spotify}
             uri={result.track.uri}
             size={size}
             view={view}
