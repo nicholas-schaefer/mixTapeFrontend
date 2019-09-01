@@ -252,14 +252,14 @@ class MixTapeContainer extends Component {
                 />
                 <List>
                 {this.state.userPlaylists.map(item => (
+                  <div style={{display: item.owner.id === this.state.userData.id ? 'none' : '' }}>
                   <ListItem key={item.id}>
-                    <div style={{display: item.owner.id === this.state.userData.id ? 'none' : '' }}>
                         <strong>
                           {item.name}
                         </strong>
                       <SelectBtn onClick={() => this.handleReceivingPlaylistSubmitLink(item.id)} />
-                    </div>
                   </ListItem>
+                  </div>
                 ))}
               </List>
                 </div>
@@ -280,14 +280,14 @@ class MixTapeContainer extends Component {
               <h4>Your personal playlists</h4>
                 <List>
                 {this.state.userPlaylists.map(item => (
+                  <div style={{display: item.owner.id === this.state.userData.id ? '' : 'none' }}>
                   <ListItem key={item.id}>
-                    <div style={{display: item.owner.id === this.state.userData.id ? '' : 'none' }}>
                         <strong>
                           {item.name}
                         </strong>
                       <SelectBtn onClick={() => this.handleSendingPlaylistSubmitLink(item.id)} />
-                    </div>
                   </ListItem>
+                  </div>
                 ))}
               </List>
             </Card>
