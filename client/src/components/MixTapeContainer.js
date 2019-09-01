@@ -252,8 +252,8 @@ class MixTapeContainer extends Component {
                 />
                 <List>
                 {this.state.userPlaylists.map(item => (
-                  <div style={{display: item.owner.id === this.state.userData.id ? 'none' : '' }}>
-                  <ListItem key={item.id}>
+                  <div key={item.id} style={{display: item.owner.id === this.state.userData.id ? 'none' : '' }}>
+                  <ListItem>
                         <strong>
                           {item.name}
                         </strong>
@@ -280,8 +280,8 @@ class MixTapeContainer extends Component {
               <h4>Your personal playlists</h4>
                 <List>
                 {this.state.userPlaylists.map(item => (
-                  <div style={{display: item.owner.id === this.state.userData.id ? '' : 'none' }}>
-                  <ListItem key={item.id}>
+                  <div key={item.id} style={{display: item.owner.id === this.state.userData.id ? '' : 'none' }}>
+                  <ListItem>
                         <strong>
                           {item.name}
                         </strong>
