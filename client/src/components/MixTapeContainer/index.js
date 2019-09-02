@@ -1,14 +1,14 @@
 import React, { Component } from "react";
-import Container from "./Container";
-import Row from "./Row";
-import Col from "./Col";
-import Card from "./Card";
-import SearchForm from "./SearchForm";
-import MixTapeDetail from "./MixTapeDetail";
-import API from "../utils/API";
-import { List, ListItem } from "./List";
-import DeleteBtn from "./DeleteBtn";
-import SelectBtn from "./SelectBtn";
+import Container from "../Container";
+import Row from "../Row";
+import Col from "../Col";
+import Card from "../Card";
+import SearchForm from "../SearchForm";
+import MixTapeDetail from "../MixTapeDetail";
+import API from "../../utils/API";
+import { List, ListItem } from "../List";
+import DeleteBtn from "../DeleteBtn";
+import SelectBtn from "../SelectBtn";
 import queryString from 'query-string';
 
 
@@ -272,15 +272,6 @@ class MixTapeContainer extends Component {
                     <h3>Select Your Playlist</h3>
                   </div>
                 )}
-              {/* <SearchForm
-                description={this.state.selectedSendingPlaylistDetails.name}
-                placeholder="Personal Playlist URI"
-                buttonText="Submit"
-                value={this.state.selectedSendingPlaylistSearch}
-                handleInputChange={this.handleInputChange}
-                name="selectedSendingPlaylistSearch"
-                handleFormSubmit={this.handleSendingPlaylistSubmit}
-              /> */}
               <br/>
               <h3 style={{backgroundColor: "coral"}}>{this.state.selectedSendingPlaylistDetails.name}</h3>
               <h5>Your personal playlists</h5>
