@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const bookSchema = new Schema({
+const tracksSchema = new Schema({
   title: { type: String, required: true },
   artists: { type: String, required: true },
   userName: { type: String, required: true },
@@ -9,7 +9,7 @@ const bookSchema = new Schema({
   trackId: { type: String, required: true, unique: true },
 });
 
-const Track = mongoose.model("Track", bookSchema);
+const Track = mongoose.model("Track", tracksSchema);
 
 module.exports = Track;
 
