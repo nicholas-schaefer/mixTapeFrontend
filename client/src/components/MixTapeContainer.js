@@ -31,15 +31,15 @@ class MixTapeContainer extends Component {
     let spotifyApi = new SpotifyWebApi();
     let parsed = queryString.parse(window.location.search);
     let accessToken = parsed.access_token;
-    
+
     this.viewMongoDbData()
 
     spotifyApi.setAccessToken(accessToken);
-    
+
     spotifyApi.getMe()
       .then(data => this.viewMongoDbData(data.body.id), function (err) {
-          console.log('Something went wrong!', err);
-        })
+        console.log('Something went wrong!', err);
+      })
 
     spotifyApi.getMe()
       .then(data => this.setState(
@@ -56,7 +56,7 @@ class MixTapeContainer extends Component {
         }), function (err) {
           console.log('Something went wrong!', err);
         }
-        );
+      );
   };
 
   getPlaylistDetailsSetState = (trackUri, stateKey) => {
@@ -124,6 +124,12 @@ class MixTapeContainer extends Component {
       .catch(err => console.log(err));
   };
 
+  unBanishAllSongs = () => {
+    API.deleteAllSongs(this.state.userData.id)
+      .then(res => this.viewMongoDbData(this.state.userData.id))
+      .catch(err => console.log(err));
+  };
+
   deleteSong = id => {
     API.deleteSong(id)
       .then(res => this.viewMongoDbData(this.state.userData.id))
@@ -169,11 +175,11 @@ class MixTapeContainer extends Component {
   };
 
   handleReceivingPlaylistSubmitLink = playlistId => {
-    this.setState({search: playlistId})
+    this.setState({ search: playlistId })
     this.getAllTracksSetState(playlistId, 'serverData');
     this.getPlaylistDetailsSetState(playlistId, 'receivingPlaylist');
   };
-  
+
   handleSendingPlaylistSubmit = event => {
     event.preventDefault();
     console.log(this.state.selectedSendingPlaylistSearch);
@@ -182,7 +188,7 @@ class MixTapeContainer extends Component {
   };
 
   handleSendingPlaylistSubmitLink = playlistId => {
-    this.setState({selectedSendingPlaylistSearch: playlistId})
+    this.setState({ selectedSendingPlaylistSearch: playlistId })
     this.getAllTracksSetState(playlistId, 'selectedSendingPlaylistData');
     this.getPlaylistDetailsSetState(playlistId, 'selectedSendingPlaylistDetails');
   };
@@ -206,17 +212,24 @@ class MixTapeContainer extends Component {
                 />
               ) : (
                   <div>
-                    <h3>Welcome to MixTape: <span style={{backgroundColor: "coral"}}>{this.state.userData.display_name}</span></h3>
-                    <p>Click Login Button to Begin!</p>
+                    <h3>Welcome to MixTape: <span style={{ backgroundColor: "coral" }}>{this.state.userData.display_name}</span></h3>
                   </div>
                 )}
-              <span
-                onClick={() => window.location = 'http://localhost:8888/login'}
-                className="btn btn-secondary"
-                role="button"
-                tabIndex="0">
-                Login to Spotify
-          </span>
+              {this.state.userData ? (
+                  <div>
+                  </div>
+              ) : (
+                <div>
+                  <p>Click Login Button to Begin!</p>
+                  <span
+                    onClick={() => window.location = 'http://localhost:8888/login'}
+                    className="btn btn-primary"
+                    role="button"
+                    tabIndex="0">
+                    Login to Spotify
+                  </span>
+                </div>
+                )}
             </Card>
           </Col>
           <Col size="md-4">
@@ -231,35 +244,35 @@ class MixTapeContainer extends Component {
                 )}
               {this.state.selectedSendingPlaylistDetails ? (
                 <div>
-                <SearchForm
-                  description={this.state.receivingPlaylist.name}
-                  placeholder="Public Playlist URI"
-                  buttonText="Submit"
-                  value={this.state.search}
-                  handleInputChange={this.handleInputChange}
-                  name="search"
-                  handleFormSubmit={this.handleReceivingPlaylistSubmit}
-                />
-                <h5>Your saved public playlists</h5>
-                <List>
-                {this.state.userPlaylists.map(item => (
-                  <div key={item.id} style={{display: item.owner.id === this.state.userData.id ? 'none' : '' }}>
-                  <ListItem>
-                        <strong>
-                          {item.name}
-                        </strong>
-                      <SelectBtn onClick={() => this.handleReceivingPlaylistSubmitLink(item.id)} />
-                  </ListItem>
-                  </div>
-                ))}
-              </List>
+                  <SearchForm
+                    placeholder="Public Playlist URI"
+                    buttonText="Submit"
+                    value={this.state.search}
+                    handleInputChange={this.handleInputChange}
+                    name="search"
+                    handleFormSubmit={this.handleReceivingPlaylistSubmit}
+                  />
+                  <h3 style={{backgroundColor: "coral"}}>{this.state.receivingPlaylist.name}</h3>
+                  <h5>Your saved public playlists</h5>
+                  <List>
+                    {this.state.userPlaylists.map(item => (
+                      <div key={item.id} style={{ display: item.owner.id === this.state.userData.id ? 'none' : '' }}>
+                        <ListItem>
+                          <strong>
+                            {item.name}
+                          </strong>
+                          <SelectBtn onClick={() => this.handleReceivingPlaylistSubmitLink(item.id)} />
+                        </ListItem>
+                      </div>
+                    ))}
+                  </List>
                 </div>
               ) : (
                   <div>
                     <h3>Select Your Playlist</h3>
                   </div>
                 )}
-              <SearchForm
+              {/* <SearchForm
                 description={this.state.selectedSendingPlaylistDetails.name}
                 placeholder="Personal Playlist URI"
                 buttonText="Submit"
@@ -267,32 +280,46 @@ class MixTapeContainer extends Component {
                 handleInputChange={this.handleInputChange}
                 name="selectedSendingPlaylistSearch"
                 handleFormSubmit={this.handleSendingPlaylistSubmit}
-              />
+              /> */}
+              <br/>
+              <h3 style={{backgroundColor: "coral"}}>{this.state.selectedSendingPlaylistDetails.name}</h3>
               <h5>Your personal playlists</h5>
-                <List>
+              <List>
                 {this.state.userPlaylists.map(item => (
-                  <div key={item.id} style={{display: item.owner.id === this.state.userData.id ? '' : 'none' }}>
-                  <ListItem>
-                        <strong>
-                          {item.name}
-                        </strong>
+                  <div key={item.id} style={{ display: item.owner.id === this.state.userData.id ? '' : 'none' }}>
+                    <ListItem>
+                      <strong>
+                        {item.name}
+                      </strong>
                       <SelectBtn onClick={() => this.handleSendingPlaylistSubmitLink(item.id)} />
-                  </ListItem>
+                    </ListItem>
                   </div>
                 ))}
               </List>
             </Card>
             <Card heading="Banished Songs">
+              {this.state.userData ? (
+                <span
+                  onClick={() => this.unBanishAllSongs()}
+                  className="btn btn-success"
+                  role="button"
+                  tabIndex="0">
+                  Unbanish All Songs
+                </span>
+              ) : (
+                  <div>
+                  </div>
+                )}
               <List>
                 {this.state.banishedSongs.map(banishedTrack => (
                   <ListItem key={banishedTrack._id}>
-                      <strong>
-                        <u>
-                        {banishedTrack.title} 
-                        </u>
-                        <br/>
-                        by {banishedTrack.artists}
-                      </strong>
+                    <strong>
+                      <u>
+                        {banishedTrack.title}
+                      </u>
+                      <br />
+                      by {banishedTrack.artists}
+                    </strong>
                     <DeleteBtn onClick={() => this.deleteSong(banishedTrack._id)} />
                   </ListItem>
                 ))}

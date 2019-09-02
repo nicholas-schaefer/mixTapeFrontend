@@ -4,7 +4,8 @@ const mixtapeController = require("../../controllers/mixtapeController");
 // Matches with "/api/tracks"
 router.route("/")
   .get(mixtapeController.findAll)
-  .post(mixtapeController.create);
+  .post(mixtapeController.create)
+  .delete(mixtapeController.removeAll);
 
 // Matches with "/api/tracks/:id"
 router
