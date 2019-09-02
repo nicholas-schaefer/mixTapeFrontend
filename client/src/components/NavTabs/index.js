@@ -1,6 +1,6 @@
 import React from "react";
 import "./style.css";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 
 let func1 = () => {
@@ -15,7 +15,7 @@ let func2 = () => {
 function NavTabs() {
   return (
     <ul className="nav nav-tabs">
-      <li className="nav-item">
+      {/* <li className="nav-item">
         <Link
           to="/"
           className={window.location.pathname === "/" ? "nav-link active" : "nav-link"}
@@ -27,16 +27,11 @@ function NavTabs() {
         <Link to="/search" className={window.location.pathname === "/" ? "nav-link active" : "nav-link"}>
           Spotify Sign Out
         </Link>
-      </li>
-      <span className="navbar-text">
-        {/* <button  className="signout" onClick={() => 
-      window.open('https://www.google.com', '_blank' )
-      }>
-         Log Out 
-         </button> */}
+      </li> */}
+      <li className="nav-item">
         <button className="signout" onClick={function(event){ func1(); func2()}}>Spotify Sign Out
          </button>
-      </span>
+      </li>
     </ul>
   );
 }

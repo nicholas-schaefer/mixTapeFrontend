@@ -1,9 +1,8 @@
 .signout {
-  float: left;
   color: bisque;
   background-color: transparent;
   border-color: #6c757d;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: Verdana, 'Geneva', Tahoma, sans-serif;
   font-size: 16px;
   padding: 6px 12px;
   transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
