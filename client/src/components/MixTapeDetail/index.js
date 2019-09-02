@@ -47,7 +47,7 @@ function MixTapeDetail(props) {
           </span>
           <span
             onClick={() => { props.onClickActionSave(result.track) }}
-            className="btn btn-primary"
+            className="btn btn-success"
             role="button"
             tabIndex="0">
             Save
