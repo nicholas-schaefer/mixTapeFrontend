@@ -222,7 +222,10 @@ class MixTapeContainer extends Component {
                 <div>
                   <p>Click Login Button to Begin!</p>
                   <span
-                    onClick={() => window.location = 'http://localhost:8888/login'}
+//////////////////////////////////FLIP COMMENTED/UNCOMMENTED BELOW TEXT ON LOCAL\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\                  
+                    // onClick={() => window.location = 'http://localhost:8888/login'}
+                    onClick={() => window.location = 'https://mixtapebackend.herokuapp.com/login'}
+//////////////////////////////////FLIP COMMENTED/UNCOMMENTED ABOVE TEXT ON LOCAL\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\   
                     className="btn btn-primary"
                     role="button"
                     tabIndex="0">
