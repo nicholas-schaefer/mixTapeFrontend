@@ -18,6 +18,8 @@ Mixtape was created to help Spotify users create they're dream playlist with eas
 ​
 ## Live App:
 Deployed on Heroku: [https://mixtapeme.herokuapp.com]
+
+![alt text](./client/public/images/mixtapeHowToVideo.gif "HowToVideo")
 ​
 ## Setup
 Steps to run app on local server
